@@ -5,6 +5,9 @@ import {
 import { EducationLevel } from '@/domain/enums/education-levels.enum';
 
 export class ProEntity {
+  private readonly MINIMUM_AGE = 18;
+  private readonly HIGH_SCHOOL_POINTS = 1;
+
   constructor(
     private readonly age: number,
     private readonly educationLevel: EducationLevel,
@@ -15,6 +18,19 @@ export class ProEntity {
   ) {}
 
   calculateScore(): number {
-    return 0;
+    let totalScore = 0;
+    if (this.isUnderAge()) {
+      return totalScore;
+    }
+    totalScore += this.calculateEducationScore();
+    return totalScore;
+  }
+
+  private isUnderAge(): boolean {
+    return this.age < this.MINIMUM_AGE;
+  }
+
+  private calculateEducationScore() {
+    return this.HIGH_SCHOOL_POINTS;
   }
 }
