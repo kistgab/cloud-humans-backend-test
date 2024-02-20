@@ -17,15 +17,15 @@ export class PairProWithProjectUseCase {
     );
 
     return {
-      eligibleProjects: [],
       score: pro.calculateScore(),
-      selectedProject: null,
-      ineligibleProjects: [
+      selectedProject: Project.CalculateDarkMatterNasa,
+      eligibleProjects: [
         Project.CalculateDarkMatterNasa,
         Project.CollectInformationForXpto,
         Project.DetermineSchrodingerCatIsAlive,
         Project.SupportUsersFromXyz,
       ],
+      ineligibleProjects: [],
     };
   }
 }
