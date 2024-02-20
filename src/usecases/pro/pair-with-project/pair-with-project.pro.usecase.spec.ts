@@ -19,7 +19,7 @@ function createFakeInput(): PairProWithProjectInput {
       support: false,
     },
     internetTest: {
-      downloadSpeed: 50.4,
+      downloadSpeed: 40.2,
       uploadSpeed: 40.2,
     },
     writingScore: 0.6,

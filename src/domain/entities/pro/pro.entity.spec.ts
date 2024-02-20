@@ -6,7 +6,7 @@ function createSut(customProps?: Partial<ProEntity>) {
     customProps?.age || 25,
     customProps?.educationLevel || EducationLevel.NoEducation,
     customProps?.pastExperiences || { sales: false, support: false },
-    customProps?.internetTest || { downloadSpeed: 100, uploadSpeed: 100 },
+    customProps?.internetTest || { downloadSpeed: 30, uploadSpeed: 30 },
     customProps?.writingScore || 1,
     customProps?.referralCode || 'referral-code',
   );
@@ -92,7 +92,7 @@ describe('Pro Entity', () => {
       expect(result).toBe(8);
     });
 
-    it('should add no point if the pro internet is ok', () => {
+    it('should add no points if the pro internet is ok', () => {
       const pro = createSut({
         internetTest: { downloadSpeed: 30, uploadSpeed: 30 },
       });
@@ -100,6 +100,16 @@ describe('Pro Entity', () => {
       const result = pro.calculateScore();
 
       expect(result).toBe(0);
+    });
+
+    it('should add 1 point if the downloadSpeed is good', () => {
+      const pro = createSut({
+        internetTest: { downloadSpeed: 100, uploadSpeed: 30 },
+      });
+
+      const result = pro.calculateScore();
+
+      expect(result).toBe(1);
     });
   });
 });
