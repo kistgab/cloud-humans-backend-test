@@ -11,6 +11,7 @@ export class ProEntity {
   private readonly NO_EDUCATION_POINTS = 0;
   private readonly PAST_EXPERIENCE_SUPPORT_POINTS = 3;
   private readonly NO_PAST_EXPERIENCE_POINTS = 0;
+  private readonly PAST_EXPERIENCE_SALES_POINTS = 5;
 
   constructor(
     private readonly _age: number,
@@ -72,6 +73,9 @@ export class ProEntity {
   calculatePastExperiencesScore(): number {
     if (this._pastExperiences.support) {
       return this.PAST_EXPERIENCE_SUPPORT_POINTS;
+    }
+    if (this._pastExperiences.sales) {
+      return this.PAST_EXPERIENCE_SALES_POINTS;
     }
     return this.NO_PAST_EXPERIENCE_POINTS;
   }
