@@ -9,6 +9,8 @@ export class ProEntity {
   private readonly HIGH_SCHOOL_POINTS = 1;
   private readonly BACHELORS_OR_HIGHER_POINTS = 2;
   private readonly NO_EDUCATION_POINTS = 0;
+  private readonly PAST_EXPERIENCE_SUPPORT_POINTS = 3;
+  private readonly NO_PAST_EXPERIENCE_POINTS = 0;
 
   constructor(
     private readonly _age: number,
@@ -49,6 +51,7 @@ export class ProEntity {
       return totalScore;
     }
     totalScore += this.calculateEducationScore();
+    totalScore += this.calculatePastExperiencesScore();
     return totalScore;
   }
 
@@ -64,5 +67,12 @@ export class ProEntity {
       return this.BACHELORS_OR_HIGHER_POINTS;
     }
     return this.NO_EDUCATION_POINTS;
+  }
+
+  calculatePastExperiencesScore(): number {
+    if (this._pastExperiences.support) {
+      return this.PAST_EXPERIENCE_SUPPORT_POINTS;
+    }
+    return this.NO_PAST_EXPERIENCE_POINTS;
   }
 }
