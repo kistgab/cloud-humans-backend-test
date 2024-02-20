@@ -121,5 +121,35 @@ describe('Pro Entity', () => {
 
       expect(result).toBe(2);
     });
+
+    it('should add 1 point if only uploadSpeed is good', () => {
+      const pro = createSut({
+        internetTest: { downloadSpeed: 10, uploadSpeed: 100 },
+      });
+
+      const result = pro.calculateScore();
+
+      expect(result).toBe(1);
+    });
+
+    it('should deduct a point if only uploadSpeed is bad', () => {
+      const pro = createSut({
+        internetTest: { downloadSpeed: 10, uploadSpeed: 1 },
+      });
+
+      const result = pro.calculateScore();
+
+      expect(result).toBe(-1);
+    });
+
+    it('should deduct a point if only downloadSpeed is bad', () => {
+      const pro = createSut({
+        internetTest: { downloadSpeed: 3, uploadSpeed: 50 },
+      });
+
+      const result = pro.calculateScore();
+
+      expect(result).toBe(-1);
+    });
   });
 });
