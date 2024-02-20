@@ -9,13 +9,37 @@ export class ProEntity {
   private readonly HIGH_SCHOOL_POINTS = 1;
 
   constructor(
-    private readonly age: number,
-    private readonly educationLevel: EducationLevel,
-    private readonly pastExperiences: ProPastExperiences,
-    private readonly internetTest: ProInternetTest,
-    private readonly writingScore: number,
-    private readonly referralCode?: string,
+    private readonly _age: number,
+    private readonly _educationLevel: EducationLevel,
+    private readonly _pastExperiences: ProPastExperiences,
+    private readonly _internetTest: ProInternetTest,
+    private readonly _writingScore: number,
+    private readonly _referralCode?: string,
   ) {}
+
+  get age(): number {
+    return this._age;
+  }
+
+  get educationLevel(): EducationLevel {
+    return this._educationLevel;
+  }
+
+  get pastExperiences(): ProPastExperiences {
+    return this.pastExperiences;
+  }
+
+  get internetTest(): ProInternetTest {
+    return this._internetTest;
+  }
+
+  get writingScore(): number {
+    return this._writingScore;
+  }
+
+  get referralCode(): string | undefined {
+    return this._referralCode;
+  }
 
   calculateScore(): number {
     let totalScore = 0;
@@ -27,11 +51,11 @@ export class ProEntity {
   }
 
   private isUnderAge(): boolean {
-    return this.age < this.MINIMUM_AGE;
+    return this._age < this.MINIMUM_AGE;
   }
 
   private calculateEducationScore() {
-    if (this.educationLevel === EducationLevel.HighSchool) {
+    if (this._educationLevel === EducationLevel.HighSchool) {
       return this.HIGH_SCHOOL_POINTS;
     }
     return 2;
