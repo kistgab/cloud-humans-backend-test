@@ -4,7 +4,7 @@ import { EducationLevel } from '@/domain/enums/education-levels.enum';
 function createSut(customProps?: Partial<ProEntity>) {
   return new ProEntity(
     customProps?.age || 25,
-    customProps?.educationLevel || EducationLevel.BachelorsDegreeOrHigher,
+    customProps?.educationLevel || EducationLevel.NoEducation,
     customProps?.pastExperiences || { sales: false, support: false },
     customProps?.internetTest || { downloadSpeed: 100, uploadSpeed: 100 },
     customProps?.writingScore || 1,
@@ -50,6 +50,16 @@ describe('Pro Entity', () => {
       const result = bachelorsPro.calculateScore();
 
       expect(result).toBe(0);
+    });
+
+    it('should add 3 points if Pro has past experiences with support', () => {
+      const bachelorsPro = createSut({
+        pastExperiences: { sales: false, support: true },
+      });
+
+      const result = bachelorsPro.calculateScore();
+
+      expect(result).toBe(3);
     });
   });
 });

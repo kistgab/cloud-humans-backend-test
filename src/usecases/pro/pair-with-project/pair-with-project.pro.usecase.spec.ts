@@ -16,7 +16,7 @@ function createFakeInput(): PairProWithProjectInput {
     educationLevel: EducationLevel.NoEducation,
     pastExperiences: {
       sales: false,
-      support: true,
+      support: false,
     },
     internetTest: {
       downloadSpeed: 50.4,
@@ -100,6 +100,27 @@ describe('PairProWithProject - Use Case', () => {
 
     const expectedResult: PairProWithProjectOutput = {
       score: 0,
+      selectedProject: null,
+      eligibleProjects: [],
+      ineligibleProjects: [
+        Project.CalculateDarkMatterNasa,
+        Project.CollectInformationForXpto,
+        Project.DetermineSchrodingerCatIsAlive,
+        Project.SupportUsersFromXyz,
+      ],
+    };
+    expect(output).toEqual(expectedResult);
+  });
+
+  it('should add 3 points when the Pro have past experiences with support', () => {
+    const input = createFakeInput();
+    input.pastExperiences.support = true;
+    const sut = createSut();
+
+    const output = sut.pair(input);
+
+    const expectedResult: PairProWithProjectOutput = {
+      score: 3,
       selectedProject: null,
       eligibleProjects: [],
       ineligibleProjects: [
