@@ -31,6 +31,9 @@ export class ProEntity {
   }
 
   private calculateEducationScore() {
-    return this.HIGH_SCHOOL_POINTS;
+    if (this.educationLevel === EducationLevel.HighSchool) {
+      return this.HIGH_SCHOOL_POINTS;
+    }
+    return 2;
   }
 }
