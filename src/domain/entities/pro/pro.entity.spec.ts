@@ -161,5 +161,15 @@ describe('Pro Entity', () => {
 
       expect(result).toBe(-2);
     });
+
+    it('should deduct a point if writingScore is low', () => {
+      const pro = createSut({
+        writingScore: 0.2,
+      });
+
+      const result = pro.calculateScore();
+
+      expect(result).toBe(-1);
+    });
   });
 });
