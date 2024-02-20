@@ -91,7 +91,7 @@ describe('PairProWithProject - Use Case', () => {
     expect(output).toEqual(expectedResult);
   });
 
-  it('should add no points when the Pro have no education', () => {
+  it('should add no points when the Pro has no education', () => {
     const input = createFakeInput();
     input.educationLevel = EducationLevel.NoEducation;
     const sut = createSut();
@@ -112,7 +112,7 @@ describe('PairProWithProject - Use Case', () => {
     expect(output).toEqual(expectedResult);
   });
 
-  it('should add 3 points when the Pro have past experiences with support', () => {
+  it('should add 3 points when the Pro has past experiences with support', () => {
     const input = createFakeInput();
     input.pastExperiences.support = true;
     const sut = createSut();
@@ -133,7 +133,7 @@ describe('PairProWithProject - Use Case', () => {
     expect(output).toEqual(expectedResult);
   });
 
-  it('should add  no points when the Pro does not have related past experiences', () => {
+  it('should add no points when the Pro does not has related past experiences', () => {
     const input = createFakeInput();
     const sut = createSut();
 
@@ -141,6 +141,27 @@ describe('PairProWithProject - Use Case', () => {
 
     const expectedResult: PairProWithProjectOutput = {
       score: 0,
+      selectedProject: null,
+      eligibleProjects: [],
+      ineligibleProjects: [
+        Project.CalculateDarkMatterNasa,
+        Project.CollectInformationForXpto,
+        Project.DetermineSchrodingerCatIsAlive,
+        Project.SupportUsersFromXyz,
+      ],
+    };
+    expect(output).toEqual(expectedResult);
+  });
+
+  it('should add 5 points when the Pro has past experiences with sales', () => {
+    const input = createFakeInput();
+    input.pastExperiences.sales = true;
+    const sut = createSut();
+
+    const output = sut.pair(input);
+
+    const expectedResult: PairProWithProjectOutput = {
+      score: 5,
       selectedProject: null,
       eligibleProjects: [],
       ineligibleProjects: [
