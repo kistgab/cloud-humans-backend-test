@@ -17,5 +17,20 @@ describe('Pro Entity', () => {
 
       expect(result).toBe(0);
     });
+
+    it('should return add one point if Pro has the high school EducationLevel', () => {
+      const underagePro = new ProEntity(
+        25,
+        EducationLevel.HighSchool,
+        { sales: false, support: false },
+        { downloadSpeed: 40, uploadSpeed: 20 },
+        1,
+        'referral-code',
+      );
+
+      const result = underagePro.calculateScore();
+
+      expect(result).toBe(1);
+    });
   });
 });
