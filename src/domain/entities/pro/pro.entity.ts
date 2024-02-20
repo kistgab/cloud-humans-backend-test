@@ -18,9 +18,10 @@ export class ProEntity {
   private readonly BAD_INTERNET_SPEED = 5;
   private readonly BAD_INTERNET_SPEED_POINTS = -1;
   private readonly BAD_WRITING_SCORE_POINTS = -1;
-
   private readonly MINIMUM_WRITING_SCORE = 0.3;
   private readonly GOOD_WRITING_SCORE = 0.7;
+  private readonly OK_WRITING_SCORE_POINTS = 1;
+  private readonly GOOD_WRITING_SCORE_POINTS = 2;
 
   constructor(
     private readonly _age: number,
@@ -123,7 +124,10 @@ export class ProEntity {
       return this.BAD_WRITING_SCORE_POINTS;
     }
     if (this._writingScore <= this.GOOD_WRITING_SCORE) {
-      return 1;
+      return this.OK_WRITING_SCORE_POINTS;
+    }
+    if (this._writingScore > this.GOOD_WRITING_SCORE) {
+      return this.GOOD_WRITING_SCORE_POINTS;
     }
     return 0;
   }
