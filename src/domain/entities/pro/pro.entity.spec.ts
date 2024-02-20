@@ -1,17 +1,21 @@
 import { ProEntity } from '@/domain/entities/pro/pro.entity';
 import { EducationLevel } from '@/domain/enums/education-levels.enum';
 
+function createSut(customProps?: Partial<ProEntity>) {
+  return new ProEntity(
+    customProps?.age || 25,
+    customProps?.educationLevel || EducationLevel.BachelorsDegreeOrHigher,
+    customProps?.pastExperiences || { sales: false, support: false },
+    customProps?.internetTest || { downloadSpeed: 100, uploadSpeed: 100 },
+    customProps?.writingScore || 1,
+    customProps?.referralCode || 'referral-code',
+  );
+}
+
 describe('Pro Entity', () => {
   describe('calculateScore', () => {
     it('should return 0 when the Pro is underage', () => {
-      const underagePro = new ProEntity(
-        17,
-        EducationLevel.BachelorsDegreeOrHigher,
-        { sales: false, support: false },
-        { downloadSpeed: 100, uploadSpeed: 100 },
-        1,
-        'referral-code',
-      );
+      const underagePro = createSut({ age: 17 });
 
       const result = underagePro.calculateScore();
 
@@ -19,31 +23,21 @@ describe('Pro Entity', () => {
     });
 
     it('should return add one point if Pro has the high school EducationLevel', () => {
-      const underagePro = new ProEntity(
-        25,
-        EducationLevel.HighSchool,
-        { sales: false, support: false },
-        { downloadSpeed: 40, uploadSpeed: 20 },
-        1,
-        'referral-code',
-      );
+      const highSchoolPro = createSut({
+        educationLevel: EducationLevel.HighSchool,
+      });
 
-      const result = underagePro.calculateScore();
+      const result = highSchoolPro.calculateScore();
 
       expect(result).toBe(1);
     });
 
     it('should return add two points if Pro has the bachelors degree or higher EducationLevel', () => {
-      const underagePro = new ProEntity(
-        25,
-        EducationLevel.BachelorsDegreeOrHigher,
-        { sales: false, support: false },
-        { downloadSpeed: 40, uploadSpeed: 20 },
-        1,
-        'referral-code',
-      );
+      const bachelorsPro = createSut({
+        educationLevel: EducationLevel.BachelorsDegreeOrHigher,
+      });
 
-      const result = underagePro.calculateScore();
+      const result = bachelorsPro.calculateScore();
 
       expect(result).toBe(2);
     });
