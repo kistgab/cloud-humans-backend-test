@@ -6,23 +6,32 @@ import {
 } from '@/usecases/pro/pair-with-project/pair-with-project.pro.dto';
 import { PairProWithProjectUseCase } from '@/usecases/pro/pair-with-project/pair-with-project.pro.usecase';
 
+function createSut(): PairProWithProjectUseCase {
+  return new PairProWithProjectUseCase();
+}
+
+function createFakeInput(): PairProWithProjectInput {
+  return {
+    age: 35,
+    educationLevel: EducationLevel.HighSchool,
+    pastExperiences: {
+      sales: false,
+      support: true,
+    },
+    internetTest: {
+      downloadSpeed: 50.4,
+      uploadSpeed: 40.2,
+    },
+    writingScore: 0.6,
+    referralCode: 'any_referral_code',
+  };
+}
+
 describe('PairProWithProject - Use Case', () => {
   it('should return an empty list for eligible projects when the Pro is underage', () => {
-    const input: PairProWithProjectInput = {
-      age: 17,
-      educationLevel: EducationLevel.BachelorsDegreeOrHigher,
-      pastExperiences: {
-        sales: false,
-        support: true,
-      },
-      internetTest: {
-        downloadSpeed: 1,
-        uploadSpeed: 1,
-      },
-      writingScore: 1,
-      referralCode: 'any_referral_code',
-    };
-    const sut = new PairProWithProjectUseCase();
+    const input = createFakeInput();
+    input.age = 17;
+    const sut = createSut();
 
     const output = sut.pair(input);
 
