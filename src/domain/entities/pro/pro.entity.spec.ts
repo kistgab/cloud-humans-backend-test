@@ -43,53 +43,63 @@ describe('Pro Entity', () => {
     });
 
     it('should add no points if Pro has no education', () => {
-      const bachelorsPro = createSut({
+      const noEducationPro = createSut({
         educationLevel: EducationLevel.NoEducation,
       });
 
-      const result = bachelorsPro.calculateScore();
+      const result = noEducationPro.calculateScore();
 
       expect(result).toBe(0);
     });
 
     it('should add 3 points if Pro has past experiences with support', () => {
-      const bachelorsPro = createSut({
+      const experiencedSupportPro = createSut({
         pastExperiences: { sales: false, support: true },
       });
 
-      const result = bachelorsPro.calculateScore();
+      const result = experiencedSupportPro.calculateScore();
 
       expect(result).toBe(3);
     });
 
     it('should add no points if Pro has no past experiences', () => {
-      const bachelorsPro = createSut({
+      const noExperiencedPro = createSut({
         pastExperiences: { sales: false, support: false },
       });
 
-      const result = bachelorsPro.calculateScore();
+      const result = noExperiencedPro.calculateScore();
 
       expect(result).toBe(0);
     });
 
     it('should add 5 points if Pro has past experiences with Sales', () => {
-      const bachelorsPro = createSut({
+      const experiencedSalesPro = createSut({
         pastExperiences: { sales: true, support: false },
       });
 
-      const result = bachelorsPro.calculateScore();
+      const result = experiencedSalesPro.calculateScore();
 
       expect(result).toBe(5);
     });
 
     it('should add 8 points if Pro has past experiences with both Sales and Support', () => {
-      const bachelorsPro = createSut({
+      const bothExperiencedPro = createSut({
         pastExperiences: { sales: true, support: true },
       });
 
-      const result = bachelorsPro.calculateScore();
+      const result = bothExperiencedPro.calculateScore();
 
       expect(result).toBe(8);
+    });
+
+    it('should add no point if the pro internet is ok', () => {
+      const pro = createSut({
+        internetTest: { downloadSpeed: 30, uploadSpeed: 30 },
+      });
+
+      const result = pro.calculateScore();
+
+      expect(result).toBe(0);
     });
   });
 });
