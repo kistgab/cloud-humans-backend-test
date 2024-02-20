@@ -7,6 +7,8 @@ import { EducationLevel } from '@/domain/enums/education-levels.enum';
 export class ProEntity {
   private readonly MINIMUM_AGE = 18;
   private readonly HIGH_SCHOOL_POINTS = 1;
+  private readonly BACHELORS_OR_HIGHER_POINTS = 2;
+  private readonly NO_EDUCATION_POINTS = 0;
 
   constructor(
     private readonly _age: number,
@@ -58,6 +60,9 @@ export class ProEntity {
     if (this._educationLevel === EducationLevel.HighSchool) {
       return this.HIGH_SCHOOL_POINTS;
     }
-    return 2;
+    if (this._educationLevel === EducationLevel.BachelorsDegreeOrHigher) {
+      return this.BACHELORS_OR_HIGHER_POINTS;
+    }
+    return this.NO_EDUCATION_POINTS;
   }
 }
