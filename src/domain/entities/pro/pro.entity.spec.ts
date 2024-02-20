@@ -171,5 +171,25 @@ describe('Pro Entity', () => {
 
       expect(result).toBe(-1);
     });
+
+    it('should add a point if writingScore is ok', () => {
+      const pro = createSut({
+        writingScore: 0.7,
+      });
+
+      const result = pro.calculateScore();
+
+      expect(result).toBe(1);
+    });
+
+    it('should add a point if writingScore is ok', () => {
+      const pro = createSut({
+        writingScore: 0.3,
+      });
+
+      const result = pro.calculateScore();
+
+      expect(result).toBe(1);
+    });
   });
 });
