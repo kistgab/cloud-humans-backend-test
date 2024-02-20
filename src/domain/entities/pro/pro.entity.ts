@@ -14,8 +14,9 @@ export class ProEntity {
   private readonly PAST_EXPERIENCE_SALES_POINTS = 5;
   private readonly GOOD_INTERNET_SPEED_POINTS = 1;
   private readonly NORMAL_ITERNET_SPEED_POINTS = 0;
-
-  private readonly GREAT_INTERNET_SPEED = 50;
+  private readonly GOOD_INTERNET_SPEED = 50;
+  private readonly BAD_INTERNET_SPEED = 5;
+  private readonly BAD_INTERNET_SPEED_POINTS = -1;
 
   constructor(
     private readonly _age: number,
@@ -93,15 +94,21 @@ export class ProEntity {
   }
 
   private calculateDownloadSpeedScore(): number {
-    if (this._internetTest.downloadSpeed > this.GREAT_INTERNET_SPEED) {
+    if (this._internetTest.downloadSpeed > this.GOOD_INTERNET_SPEED) {
       return this.GOOD_INTERNET_SPEED_POINTS;
+    }
+    if (this._internetTest.downloadSpeed < this.BAD_INTERNET_SPEED) {
+      return this.BAD_INTERNET_SPEED_POINTS;
     }
     return this.NORMAL_ITERNET_SPEED_POINTS;
   }
 
   private calculateUploadSpeedScore(): number {
-    if (this._internetTest.uploadSpeed > this.GREAT_INTERNET_SPEED) {
+    if (this._internetTest.uploadSpeed > this.GOOD_INTERNET_SPEED) {
       return this.GOOD_INTERNET_SPEED_POINTS;
+    }
+    if (this._internetTest.uploadSpeed < this.BAD_INTERNET_SPEED) {
+      return this.BAD_INTERNET_SPEED_POINTS;
     }
     return this.NORMAL_ITERNET_SPEED_POINTS;
   }
