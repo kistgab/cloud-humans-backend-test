@@ -53,6 +53,7 @@ export class ProEntity {
     }
     totalScore += this.calculateEducationScore();
     totalScore += this.calculatePastExperiencesScore();
+    totalScore += this.calculateInternetScore();
     return totalScore;
   }
 
@@ -70,7 +71,7 @@ export class ProEntity {
     return this.NO_EDUCATION_POINTS;
   }
 
-  calculatePastExperiencesScore(): number {
+  private calculatePastExperiencesScore(): number {
     let totalPastExperiencePoints = this.NO_PAST_EXPERIENCE_POINTS;
     if (this._pastExperiences.support) {
       totalPastExperiencePoints += this.PAST_EXPERIENCE_SUPPORT_POINTS;
@@ -79,5 +80,9 @@ export class ProEntity {
       totalPastExperiencePoints += this.PAST_EXPERIENCE_SALES_POINTS;
     }
     return totalPastExperiencePoints;
+  }
+
+  private calculateInternetScore(): number {
+    return 0;
   }
 }
