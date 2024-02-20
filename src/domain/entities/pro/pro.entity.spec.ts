@@ -32,5 +32,20 @@ describe('Pro Entity', () => {
 
       expect(result).toBe(1);
     });
+
+    it('should return add two points if Pro has the bachelors degree or higher EducationLevel', () => {
+      const underagePro = new ProEntity(
+        25,
+        EducationLevel.BachelorsDegreeOrHigher,
+        { sales: false, support: false },
+        { downloadSpeed: 40, uploadSpeed: 20 },
+        1,
+        'referral-code',
+      );
+
+      const result = underagePro.calculateScore();
+
+      expect(result).toBe(2);
+    });
   });
 });
