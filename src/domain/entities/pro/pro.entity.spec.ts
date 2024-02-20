@@ -151,5 +151,15 @@ describe('Pro Entity', () => {
 
       expect(result).toBe(-1);
     });
+
+    it('should deduct 2 points if both downloadSpeed and uploadSpeed are bad', () => {
+      const pro = createSut({
+        internetTest: { downloadSpeed: 3, uploadSpeed: 2 },
+      });
+
+      const result = pro.calculateScore();
+
+      expect(result).toBe(-2);
+    });
   });
 });
