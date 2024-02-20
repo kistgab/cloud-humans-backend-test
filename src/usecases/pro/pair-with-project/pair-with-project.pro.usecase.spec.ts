@@ -48,4 +48,25 @@ describe('PairProWithProject - Use Case', () => {
     };
     expect(output).toEqual(expectedResult);
   });
+
+  it('should add one score point to the Pro that has high school EducationLevel', () => {
+    const input = createFakeInput();
+    input.educationLevel = EducationLevel.HighSchool;
+    const sut = createSut();
+
+    const output = sut.pair(input);
+
+    const expectedResult: PairProWithProjectOutput = {
+      score: 1,
+      selectedProject: null,
+      eligibleProjects: [],
+      ineligibleProjects: [
+        Project.CalculateDarkMatterNasa,
+        Project.CollectInformationForXpto,
+        Project.DetermineSchrodingerCatIsAlive,
+        Project.SupportUsersFromXyz,
+      ],
+    };
+    expect(output).toEqual(expectedResult);
+  });
 });
