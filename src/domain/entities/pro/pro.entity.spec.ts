@@ -61,5 +61,15 @@ describe('Pro Entity', () => {
 
       expect(result).toBe(3);
     });
+
+    it('should add no points if Pro has no past experiences', () => {
+      const bachelorsPro = createSut({
+        pastExperiences: { sales: false, support: false },
+      });
+
+      const result = bachelorsPro.calculateScore();
+
+      expect(result).toBe(0);
+    });
   });
 });

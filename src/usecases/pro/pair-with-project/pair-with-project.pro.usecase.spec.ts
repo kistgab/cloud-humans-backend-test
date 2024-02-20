@@ -132,4 +132,24 @@ describe('PairProWithProject - Use Case', () => {
     };
     expect(output).toEqual(expectedResult);
   });
+
+  it('should add  no points when the Pro does not have related past experiences', () => {
+    const input = createFakeInput();
+    const sut = createSut();
+
+    const output = sut.pair(input);
+
+    const expectedResult: PairProWithProjectOutput = {
+      score: 0,
+      selectedProject: null,
+      eligibleProjects: [],
+      ineligibleProjects: [
+        Project.CalculateDarkMatterNasa,
+        Project.CollectInformationForXpto,
+        Project.DetermineSchrodingerCatIsAlive,
+        Project.SupportUsersFromXyz,
+      ],
+    };
+    expect(output).toEqual(expectedResult);
+  });
 });
