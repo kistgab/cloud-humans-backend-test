@@ -1,3 +1,4 @@
+import { ProEntity } from '@/domain/entities/pro/pro.entity';
 import { Project } from '@/domain/enums/projects.enum';
 import {
   PairProWithProjectInput,
@@ -6,10 +7,18 @@ import {
 
 export class PairProWithProjectUseCase {
   pair(input: PairProWithProjectInput): PairProWithProjectOutput {
-    input;
+    const pro = new ProEntity(
+      input.age,
+      input.educationLevel,
+      input.pastExperiences,
+      input.internetTest,
+      input.writingScore,
+      input.referralCode,
+    );
+
     return {
       eligibleProjects: [],
-      score: 0,
+      score: pro.calculateScore(),
       selectedProject: null,
       ineligibleProjects: [
         Project.CalculateDarkMatterNasa,

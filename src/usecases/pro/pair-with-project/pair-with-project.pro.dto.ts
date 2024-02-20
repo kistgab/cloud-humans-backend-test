@@ -13,7 +13,7 @@ export interface PairProWithProjectInput {
     uploadSpeed: number;
   };
   writingScore: number;
-  referralCode: string;
+  referralCode?: string;
 }
 
 export interface PairProWithProjectOutput {
