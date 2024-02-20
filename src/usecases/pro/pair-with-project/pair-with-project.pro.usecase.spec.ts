@@ -221,4 +221,28 @@ describe('PairProWithProject - Use Case', () => {
     };
     expect(output).toEqual(expectedResult);
   });
+
+  it('should add points when the Pro has a good internet', () => {
+    const input = createFakeInput();
+    input.internetTest = {
+      downloadSpeed: 100,
+      uploadSpeed: 30,
+    };
+    const sut = createSut();
+
+    const output = sut.pair(input);
+
+    const expectedResult: PairProWithProjectOutput = {
+      score: 1,
+      selectedProject: null,
+      eligibleProjects: [],
+      ineligibleProjects: [
+        Project.CalculateDarkMatterNasa,
+        Project.CollectInformationForXpto,
+        Project.DetermineSchrodingerCatIsAlive,
+        Project.SupportUsersFromXyz,
+      ],
+    };
+    expect(output).toEqual(expectedResult);
+  });
 });
