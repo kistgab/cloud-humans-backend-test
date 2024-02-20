@@ -87,11 +87,20 @@ export class ProEntity {
   }
 
   private calculateInternetScore(): number {
-    return this.calculateDownloadSpeedScore();
+    const totalInternetPoints =
+      this.calculateUploadSpeedScore() + this.calculateDownloadSpeedScore();
+    return totalInternetPoints;
   }
 
   private calculateDownloadSpeedScore(): number {
     if (this._internetTest.downloadSpeed > this.GREAT_INTERNET_SPEED) {
+      return this.GOOD_INTERNET_SPEED_POINTS;
+    }
+    return this.NORMAL_ITERNET_SPEED_POINTS;
+  }
+
+  private calculateUploadSpeedScore(): number {
+    if (this._internetTest.uploadSpeed > this.GREAT_INTERNET_SPEED) {
       return this.GOOD_INTERNET_SPEED_POINTS;
     }
     return this.NORMAL_ITERNET_SPEED_POINTS;
