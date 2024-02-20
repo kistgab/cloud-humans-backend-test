@@ -81,5 +81,15 @@ describe('Pro Entity', () => {
 
       expect(result).toBe(5);
     });
+
+    it('should add 8 points if Pro has past experiences with both Sales and Support', () => {
+      const bachelorsPro = createSut({
+        pastExperiences: { sales: true, support: true },
+      });
+
+      const result = bachelorsPro.calculateScore();
+
+      expect(result).toBe(8);
+    });
   });
 });

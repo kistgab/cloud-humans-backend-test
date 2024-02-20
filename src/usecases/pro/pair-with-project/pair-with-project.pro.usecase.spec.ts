@@ -173,4 +173,28 @@ describe('PairProWithProject - Use Case', () => {
     };
     expect(output).toEqual(expectedResult);
   });
+
+  it('should add 8 points when the Pro has past experiences with both sales and support', () => {
+    const input = createFakeInput();
+    input.pastExperiences = {
+      sales: true,
+      support: true,
+    };
+    const sut = createSut();
+
+    const output = sut.pair(input);
+
+    const expectedResult: PairProWithProjectOutput = {
+      score: 8,
+      selectedProject: null,
+      eligibleProjects: [],
+      ineligibleProjects: [
+        Project.CalculateDarkMatterNasa,
+        Project.CollectInformationForXpto,
+        Project.DetermineSchrodingerCatIsAlive,
+        Project.SupportUsersFromXyz,
+      ],
+    };
+    expect(output).toEqual(expectedResult);
+  });
 });
