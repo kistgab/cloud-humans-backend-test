@@ -7,13 +7,14 @@ function createSut(customProps?: Partial<ProEntity>) {
     customProps?.educationLevel || EducationLevel.NoEducation,
     customProps?.pastExperiences || { sales: false, support: false },
     customProps?.internetTest || { downloadSpeed: 30, uploadSpeed: 30 },
-    customProps?.writingScore || 1,
+    customProps?.writingScore || 0.6,
     customProps?.referralCode || 'referral-code',
   );
 }
 
 describe('Pro Entity', () => {
   describe('calculateScore', () => {
+    const writingScorePoints = 1;
     it('should return 0 when the Pro is underage', () => {
       const underagePro = createSut({ age: 17 });
 
@@ -29,7 +30,7 @@ describe('Pro Entity', () => {
 
       const result = highSchoolPro.calculateScore();
 
-      expect(result).toBe(1);
+      expect(result).toBe(1 + writingScorePoints);
     });
 
     it('should add two points if Pro has the bachelors degree or higher EducationLevel', () => {
@@ -39,7 +40,7 @@ describe('Pro Entity', () => {
 
       const result = bachelorsPro.calculateScore();
 
-      expect(result).toBe(2);
+      expect(result).toBe(2 + writingScorePoints);
     });
 
     it('should add no points if Pro has no education', () => {
@@ -49,7 +50,7 @@ describe('Pro Entity', () => {
 
       const result = noEducationPro.calculateScore();
 
-      expect(result).toBe(0);
+      expect(result).toBe(0 + writingScorePoints);
     });
 
     it('should add 3 points if Pro has past experiences with support', () => {
@@ -59,7 +60,7 @@ describe('Pro Entity', () => {
 
       const result = experiencedSupportPro.calculateScore();
 
-      expect(result).toBe(3);
+      expect(result).toBe(3 + writingScorePoints);
     });
 
     it('should add no points if Pro has no past experiences', () => {
@@ -69,7 +70,7 @@ describe('Pro Entity', () => {
 
       const result = noExperiencedPro.calculateScore();
 
-      expect(result).toBe(0);
+      expect(result).toBe(0 + writingScorePoints);
     });
 
     it('should add 5 points if Pro has past experiences with Sales', () => {
@@ -79,7 +80,7 @@ describe('Pro Entity', () => {
 
       const result = experiencedSalesPro.calculateScore();
 
-      expect(result).toBe(5);
+      expect(result).toBe(5 + writingScorePoints);
     });
 
     it('should add 8 points if Pro has past experiences with both Sales and Support', () => {
@@ -89,7 +90,7 @@ describe('Pro Entity', () => {
 
       const result = bothExperiencedPro.calculateScore();
 
-      expect(result).toBe(8);
+      expect(result).toBe(8 + writingScorePoints);
     });
 
     it('should add no points if the pro internet is ok', () => {
@@ -99,7 +100,7 @@ describe('Pro Entity', () => {
 
       const result = pro.calculateScore();
 
-      expect(result).toBe(0);
+      expect(result).toBe(0 + writingScorePoints);
     });
 
     it('should add 1 point if the downloadSpeed is good', () => {
@@ -109,7 +110,7 @@ describe('Pro Entity', () => {
 
       const result = pro.calculateScore();
 
-      expect(result).toBe(1);
+      expect(result).toBe(1 + writingScorePoints);
     });
 
     it('should add 2 points if both downloadSpeed and uploadSpeed are good', () => {
@@ -119,7 +120,7 @@ describe('Pro Entity', () => {
 
       const result = pro.calculateScore();
 
-      expect(result).toBe(2);
+      expect(result).toBe(2 + writingScorePoints);
     });
 
     it('should add 1 point if only uploadSpeed is good', () => {
@@ -129,7 +130,7 @@ describe('Pro Entity', () => {
 
       const result = pro.calculateScore();
 
-      expect(result).toBe(1);
+      expect(result).toBe(1 + writingScorePoints);
     });
 
     it('should deduct a point if only uploadSpeed is bad', () => {
@@ -139,7 +140,7 @@ describe('Pro Entity', () => {
 
       const result = pro.calculateScore();
 
-      expect(result).toBe(-1);
+      expect(result).toBe(-1 + writingScorePoints);
     });
 
     it('should deduct a point if only downloadSpeed is bad', () => {
@@ -149,7 +150,7 @@ describe('Pro Entity', () => {
 
       const result = pro.calculateScore();
 
-      expect(result).toBe(-1);
+      expect(result).toBe(-1 + writingScorePoints);
     });
 
     it('should deduct 2 points if both downloadSpeed and uploadSpeed are bad', () => {
@@ -159,7 +160,7 @@ describe('Pro Entity', () => {
 
       const result = pro.calculateScore();
 
-      expect(result).toBe(-2);
+      expect(result).toBe(-2 + writingScorePoints);
     });
 
     it('should deduct a point if writingScore is low', () => {
@@ -172,7 +173,7 @@ describe('Pro Entity', () => {
       expect(result).toBe(-1);
     });
 
-    it('should add a point if writingScore is ok', () => {
+    it('should add a point if writingScore is ok (0.7)', () => {
       const pro = createSut({
         writingScore: 0.7,
       });
@@ -182,7 +183,7 @@ describe('Pro Entity', () => {
       expect(result).toBe(1);
     });
 
-    it('should add a point if writingScore is ok', () => {
+    it('should add a point if writingScore is ok (0.3)', () => {
       const pro = createSut({
         writingScore: 0.3,
       });
@@ -190,6 +191,16 @@ describe('Pro Entity', () => {
       const result = pro.calculateScore();
 
       expect(result).toBe(1);
+    });
+
+    it('should add a point if writingScore is great', () => {
+      const pro = createSut({
+        writingScore: 0.8,
+      });
+
+      const result = pro.calculateScore();
+
+      expect(result).toBe(2);
     });
   });
 });
