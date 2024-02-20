@@ -13,7 +13,7 @@ function createSut(): PairProWithProjectUseCase {
 function createFakeInput(): PairProWithProjectInput {
   return {
     age: 35,
-    educationLevel: EducationLevel.HighSchool,
+    educationLevel: EducationLevel.NoEducation,
     pastExperiences: {
       sales: false,
       support: true,
