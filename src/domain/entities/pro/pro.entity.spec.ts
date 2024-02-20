@@ -22,7 +22,7 @@ describe('Pro Entity', () => {
       expect(result).toBe(0);
     });
 
-    it('should return add one point if Pro has the high school EducationLevel', () => {
+    it('should add one point if Pro has the high school EducationLevel', () => {
       const highSchoolPro = createSut({
         educationLevel: EducationLevel.HighSchool,
       });
@@ -32,7 +32,7 @@ describe('Pro Entity', () => {
       expect(result).toBe(1);
     });
 
-    it('should return add two points if Pro has the bachelors degree or higher EducationLevel', () => {
+    it('should add two points if Pro has the bachelors degree or higher EducationLevel', () => {
       const bachelorsPro = createSut({
         educationLevel: EducationLevel.BachelorsDegreeOrHigher,
       });
@@ -40,6 +40,16 @@ describe('Pro Entity', () => {
       const result = bachelorsPro.calculateScore();
 
       expect(result).toBe(2);
+    });
+
+    it('should add no points if Pro has no education', () => {
+      const bachelorsPro = createSut({
+        educationLevel: EducationLevel.NoEducation,
+      });
+
+      const result = bachelorsPro.calculateScore();
+
+      expect(result).toBe(0);
     });
   });
 });
