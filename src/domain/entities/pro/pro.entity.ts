@@ -71,12 +71,13 @@ export class ProEntity {
   }
 
   calculatePastExperiencesScore(): number {
+    let totalPastExperiencePoints = this.NO_PAST_EXPERIENCE_POINTS;
     if (this._pastExperiences.support) {
-      return this.PAST_EXPERIENCE_SUPPORT_POINTS;
+      totalPastExperiencePoints += this.PAST_EXPERIENCE_SUPPORT_POINTS;
     }
     if (this._pastExperiences.sales) {
-      return this.PAST_EXPERIENCE_SALES_POINTS;
+      totalPastExperiencePoints += this.PAST_EXPERIENCE_SALES_POINTS;
     }
-    return this.NO_PAST_EXPERIENCE_POINTS;
+    return totalPastExperiencePoints;
   }
 }
