@@ -9,33 +9,37 @@ import {
 } from '@/usecases/pro/pair-with-project/pair-with-project.pro.dto';
 import { PairProWithProjectUseCase } from '@/usecases/pro/pair-with-project/pair-with-project.pro.usecase';
 
+function createFakeProjects(): ProjectEntity[] {
+  return [
+    new ProjectEntity(
+      'calculate_dark_matter_nasa',
+      10,
+      'Calculate the Dark Matter of the universe for Nasa',
+    ),
+    new ProjectEntity(
+      'determine_schrodinger_cat_is_alive',
+      5,
+      "Determine if the Schrodinger's cat is alive",
+    ),
+    new ProjectEntity(
+      'support_users_from_xyz',
+      3,
+      'Attend to users support for a YXZ Company',
+    ),
+    new ProjectEntity(
+      'collect_information_for_xpto',
+      2,
+      'Collect specific people information from their social media for XPTO Company',
+    ),
+  ];
+}
+
 function createFindEligibleProjectsRepositoryStub(): FindEligibleProjectsRepository {
   class FindEligibleProjectsRepositoryStub
     implements FindEligibleProjectsRepository
   {
     findEligible(): Promise<ProjectEntity[]> {
-      return Promise.resolve([
-        new ProjectEntity(
-          'calculate_dark_matter_nasa',
-          10,
-          'Calculate the Dark Matter of the universe for Nasa',
-        ),
-        new ProjectEntity(
-          'determine_schrodinger_cat_is_alive',
-          5,
-          "Determine if the Schrodinger's cat is alive",
-        ),
-        new ProjectEntity(
-          'support_users_from_xyz',
-          3,
-          'Attend to users support for a YXZ Company',
-        ),
-        new ProjectEntity(
-          'collect_information_for_xpto',
-          2,
-          'Collect specific people information from their social media for XPTO Company',
-        ),
-      ]);
+      return Promise.resolve(createFakeProjects());
     }
   }
   return new FindEligibleProjectsRepositoryStub();
@@ -84,12 +88,7 @@ const pairWithProjectDataProvider: PairWithProjectDataProvider[] = [
     expectedResult: {
       score: 15,
       selectedProject: Project.CalculateDarkMatterNasa,
-      eligibleProjects: [
-        Project.CalculateDarkMatterNasa,
-        Project.CollectInformationForXpto,
-        Project.DetermineSchrodingerCatIsAlive,
-        Project.SupportUsersFromXyz,
-      ],
+      eligibleProjects: createFakeProjects().map((p) => p.title),
       ineligibleProjects: [],
     },
     pairedProject: Project.CalculateDarkMatterNasa,
