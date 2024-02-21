@@ -9,12 +9,7 @@ import {
 } from '@/usecases/pro/pair-with-project/pair-with-project.pro.dto';
 import { PairProWithProjectUseCase } from '@/usecases/pro/pair-with-project/pair-with-project.pro.usecase';
 
-type SutTypes = {
-  sut: PairProWithProjectUseCase;
-  findEligibleProjectsRepositoryStub: FindEligibleProjectsRepository;
-};
-
-function createSut(): SutTypes {
+function createFindEligibleProjectsRepositoryStub(): FindEligibleProjectsRepository {
   class FindEligibleProjectsRepositoryStub
     implements FindEligibleProjectsRepository
   {
@@ -43,8 +38,17 @@ function createSut(): SutTypes {
       ]);
     }
   }
+  return new FindEligibleProjectsRepositoryStub();
+}
+
+type SutTypes = {
+  sut: PairProWithProjectUseCase;
+  findEligibleProjectsRepositoryStub: FindEligibleProjectsRepository;
+};
+
+function createSut(): SutTypes {
   const findEligibleProjectsRepositoryStub =
-    new FindEligibleProjectsRepositoryStub();
+    createFindEligibleProjectsRepositoryStub();
   const sut = new PairProWithProjectUseCase(findEligibleProjectsRepositoryStub);
   return { sut, findEligibleProjectsRepositoryStub };
 }
@@ -106,21 +110,32 @@ describe('PairProWithProject - Use Case', () => {
     expect(findEligibleSpy).toHaveBeenCalledWith(15);
   });
 
-  it('should call the ProEntity to calculate the Pro score', () => {
+  it('should throw if FindEligibleProjectsRepository throws', () => {
+    const { sut, findEligibleProjectsRepositoryStub } = createSut();
+    jest
+      .spyOn(findEligibleProjectsRepositoryStub, 'findEligible')
+      .mockReturnValueOnce(Promise.reject(new Error('Repository error')));
+
+    const promise = sut.pair(createFakeInput());
+
+    expect(promise).rejects.toThrow('Repository error');
+  });
+
+  it('should call the ProEntity to calculate the Pro score', async () => {
     const calculateScoreSpy = jest.spyOn(ProEntity.prototype, 'calculateScore');
     const { sut } = createSut();
 
-    sut.pair(createFakeInput());
+    await sut.pair(createFakeInput());
 
     expect(calculateScoreSpy).toHaveBeenCalledTimes(1);
   });
 
   it.each(pairWithProjectDataProvider)(
     'should pair the Pro to the project "$pairedProject"',
-    ({ expectedResult, input }) => {
+    async ({ expectedResult, input }) => {
       const { sut } = createSut();
 
-      const result = sut.pair(input);
+      const result = await sut.pair(input);
 
       expect(result).toEqual(expectedResult);
     },
