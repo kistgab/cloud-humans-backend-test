@@ -1,6 +1,7 @@
 import { ProEntity } from '@/domain/entities/pro/pro.entity';
 import { Project } from '@/domain/enums/projects.enum';
 import { FindEligibleProjectsRepository } from '@/domain/repositories/find-eligible-projects.repository';
+import { FindIneligibleProjectsRepository } from '@/domain/repositories/find-ineligible-projects-repository';
 import {
   PairProWithProjectInput,
   PairProWithProjectOutput,
@@ -9,6 +10,7 @@ import {
 export class PairProWithProjectUseCase {
   constructor(
     private readonly findEligibleProjectsRepository: FindEligibleProjectsRepository,
+    private readonly findIneligibleProjectsRepository: FindIneligibleProjectsRepository,
   ) {}
 
   async pair(
@@ -28,6 +30,7 @@ export class PairProWithProjectUseCase {
     const eligibleProjectsTitles = eligibleProjects.map(
       (project) => project.title,
     );
+    await this.findIneligibleProjectsRepository.findIneligible(proScore);
     return {
       score: proScore,
       selectedProject: Project.CalculateDarkMatterNasa,
