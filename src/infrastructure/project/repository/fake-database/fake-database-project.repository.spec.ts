@@ -56,4 +56,18 @@ describe('FakeDatabaseProject - Repository', () => {
       );
     });
   });
+
+  describe('findAllIneligibles', () => {
+    it('should load the json correctly', async () => {
+      const sut = new FakeDatabaseProjectRepository();
+      const readFileSpy = jest.spyOn(fs, 'readFileSync');
+
+      await sut.findAllIneligibles(3);
+
+      expect(readFileSpy).toHaveBeenCalledWith(
+        'data/static-projects.json',
+        'utf-8',
+      );
+    });
+  });
 });
