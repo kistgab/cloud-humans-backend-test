@@ -13,7 +13,7 @@ function createFindEligibleProjectsRepositoryStub(): FindEligibleProjectsReposit
   class FindEligibleProjectsRepositoryStub
     implements FindEligibleProjectsRepository
   {
-    findEligible(): Promise<ProjectEntity[]> {
+    findAllEligibles(): Promise<ProjectEntity[]> {
       return Promise.resolve(createFakeProjects());
     }
   }
@@ -24,7 +24,7 @@ function createFindIneligibleProjectsRepositoryStub(): FindIneligibleProjectsRep
   class FindIneligibleProjectsRepositoryStub
     implements FindIneligibleProjectsRepository
   {
-    findIneligible(): Promise<ProjectEntity[]> {
+    findAllIneligibles(): Promise<ProjectEntity[]> {
       return Promise.resolve([]);
     }
   }
@@ -58,7 +58,7 @@ describe('PairProWithProject - Use Case', () => {
     const { sut, findEligibleProjectsRepositoryStub } = createSut();
     const findEligibleSpy = jest.spyOn(
       findEligibleProjectsRepositoryStub,
-      'findEligible',
+      'findAllEligibles',
     );
 
     await sut.pair(createFakePairWithProjectInput());
@@ -69,7 +69,7 @@ describe('PairProWithProject - Use Case', () => {
   it('should throw if FindEligibleProjectsRepository throws', () => {
     const { sut, findEligibleProjectsRepositoryStub } = createSut();
     jest
-      .spyOn(findEligibleProjectsRepositoryStub, 'findEligible')
+      .spyOn(findEligibleProjectsRepositoryStub, 'findAllEligibles')
       .mockReturnValueOnce(Promise.reject(new Error('Repository error')));
 
     const promise = sut.pair(createFakePairWithProjectInput());
@@ -81,7 +81,7 @@ describe('PairProWithProject - Use Case', () => {
     const { sut, findIneligibleProjectsRepositoryStub } = createSut();
     const findIneligibleSpy = jest.spyOn(
       findIneligibleProjectsRepositoryStub,
-      'findIneligible',
+      'findAllIneligibles',
     );
 
     await sut.pair(createFakePairWithProjectInput());
@@ -92,7 +92,7 @@ describe('PairProWithProject - Use Case', () => {
   it('should throw if FindIneligibleProjectsRepository throws', () => {
     const { sut, findIneligibleProjectsRepositoryStub } = createSut();
     jest
-      .spyOn(findIneligibleProjectsRepositoryStub, 'findIneligible')
+      .spyOn(findIneligibleProjectsRepositoryStub, 'findAllIneligibles')
       .mockReturnValueOnce(Promise.reject(new Error('Repository error')));
 
     const promise = sut.pair(createFakePairWithProjectInput());

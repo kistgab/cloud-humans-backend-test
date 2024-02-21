@@ -32,7 +32,7 @@ abstract class SchrodingerCatData {
     findIneligibleProjectsRepositoryStub: FindIneligibleProjectsRepository;
   }): void {
     jest
-      .spyOn(stubs.findEligibleProjectsRepositoryStub!, 'findEligible')
+      .spyOn(stubs.findEligibleProjectsRepositoryStub!, 'findAllEligibles')
       .mockReturnValueOnce(
         Promise.resolve(
           createFakeProjects().filter(
@@ -41,7 +41,7 @@ abstract class SchrodingerCatData {
         ),
       );
     jest
-      .spyOn(stubs.findIneligibleProjectsRepositoryStub!, 'findIneligible')
+      .spyOn(stubs.findIneligibleProjectsRepositoryStub!, 'findAllIneligibles')
       .mockReturnValueOnce(
         Promise.resolve([
           createFakeProjects().find(
@@ -89,7 +89,7 @@ abstract class SupportUsersData {
     findIneligibleProjectsRepositoryStub: FindIneligibleProjectsRepository;
   }): void {
     jest
-      .spyOn(stubs.findEligibleProjectsRepositoryStub!, 'findEligible')
+      .spyOn(stubs.findEligibleProjectsRepositoryStub!, 'findAllEligibles')
       .mockReturnValueOnce(
         Promise.resolve(
           createFakeProjects().filter(
@@ -100,7 +100,7 @@ abstract class SupportUsersData {
         ),
       );
     jest
-      .spyOn(stubs.findIneligibleProjectsRepositoryStub!, 'findIneligible')
+      .spyOn(stubs.findIneligibleProjectsRepositoryStub!, 'findAllIneligibles')
       .mockReturnValueOnce(
         Promise.resolve(
           createFakeProjects().filter(

@@ -19,9 +19,9 @@ export class PairProWithProjectUseCase {
     const pro = this.createProEntityFromInput(input);
     const proScore = pro.calculateScore();
     const eligibleProjects =
-      await this.findEligibleProjectsRepository.findEligible(proScore);
+      await this.findEligibleProjectsRepository.findAllEligibles(proScore);
     const ineligibleProjects =
-      await this.findIneligibleProjectsRepository.findIneligible(proScore);
+      await this.findIneligibleProjectsRepository.findAllIneligibles(proScore);
     const selectedProject = this.getSelectedProject(eligibleProjects);
     return {
       score: proScore,
