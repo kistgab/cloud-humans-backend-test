@@ -82,5 +82,16 @@ describe('FakeDatabaseProject - Repository', () => {
       ]);
       expect(mapperSpy).toHaveBeenCalledTimes(1);
     });
+
+    it('should return an list of Projects on success', async () => {
+      const sut = new FakeDatabaseProjectRepository();
+
+      const result = await sut.findAllIneligibles(3);
+
+      expect(result.length).toBe(1);
+      expect(result[0]).toEqual(
+        new ProjectEntity('any_title', 5, 'any_description'),
+      );
+    });
   });
 });
