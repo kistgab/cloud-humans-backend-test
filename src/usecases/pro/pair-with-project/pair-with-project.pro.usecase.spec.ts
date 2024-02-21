@@ -3,6 +3,7 @@ import { ProjectEntity } from '@/domain/entities/projects/project.entity';
 import { EducationLevel } from '@/domain/enums/education-levels.enum';
 import { Project } from '@/domain/enums/projects.enum';
 import { FindEligibleProjectsRepository } from '@/domain/repositories/find-eligible-projects.repository';
+import { FindIneligibleProjectsRepository } from '@/domain/repositories/find-ineligible-projects-repository';
 import {
   PairProWithProjectInput,
   PairProWithProjectOutput,
@@ -45,16 +46,37 @@ function createFindEligibleProjectsRepositoryStub(): FindEligibleProjectsReposit
   return new FindEligibleProjectsRepositoryStub();
 }
 
+function createFindIneligibleProjectsRepositoryStub(): FindIneligibleProjectsRepository {
+  class FindIneligibleProjectsRepositoryStub
+    implements FindIneligibleProjectsRepository
+  {
+    findIneligible(): Promise<ProjectEntity[]> {
+      return Promise.resolve([]);
+    }
+  }
+  return new FindIneligibleProjectsRepositoryStub();
+}
+
 type SutTypes = {
   sut: PairProWithProjectUseCase;
   findEligibleProjectsRepositoryStub: FindEligibleProjectsRepository;
+  findIneligibleProjectsRepositoryStub: FindIneligibleProjectsRepository;
 };
 
 function createSut(): SutTypes {
   const findEligibleProjectsRepositoryStub =
     createFindEligibleProjectsRepositoryStub();
-  const sut = new PairProWithProjectUseCase(findEligibleProjectsRepositoryStub);
-  return { sut, findEligibleProjectsRepositoryStub };
+  const findIneligibleProjectsRepositoryStub =
+    createFindIneligibleProjectsRepositoryStub();
+  const sut = new PairProWithProjectUseCase(
+    findEligibleProjectsRepositoryStub,
+    findIneligibleProjectsRepositoryStub,
+  );
+  return {
+    sut,
+    findEligibleProjectsRepositoryStub,
+    findIneligibleProjectsRepositoryStub,
+  };
 }
 
 function createFakeInput(
@@ -97,14 +119,14 @@ const pairWithProjectDataProvider: PairWithProjectDataProvider[] = [
 ];
 
 describe('PairProWithProject - Use Case', () => {
-  it('should call the FindEligibleProjectsRepository with correct value', () => {
+  it('should call the FindEligibleProjectsRepository with correct value', async () => {
     const { sut, findEligibleProjectsRepositoryStub } = createSut();
     const findEligibleSpy = jest.spyOn(
       findEligibleProjectsRepositoryStub,
       'findEligible',
     );
 
-    sut.pair(createFakeInput());
+    await sut.pair(createFakeInput());
 
     expect(findEligibleSpy).toHaveBeenCalledWith(15);
   });
@@ -118,6 +140,18 @@ describe('PairProWithProject - Use Case', () => {
     const promise = sut.pair(createFakeInput());
 
     expect(promise).rejects.toThrow('Repository error');
+  });
+
+  it('should call the FindIneligibleProjectsRepository with correct value', async () => {
+    const { sut, findIneligibleProjectsRepositoryStub } = createSut();
+    const findIneligibleSpy = jest.spyOn(
+      findIneligibleProjectsRepositoryStub,
+      'findIneligible',
+    );
+
+    await sut.pair(createFakeInput());
+
+    expect(findIneligibleSpy).toHaveBeenCalledWith(15);
   });
 
   it('should call the ProEntity to calculate the Pro score', async () => {
