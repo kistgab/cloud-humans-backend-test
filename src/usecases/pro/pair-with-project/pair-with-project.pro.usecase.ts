@@ -1,4 +1,5 @@
 import { ProEntity } from '@/domain/entities/pro/pro.entity';
+import { ProjectEntity } from '@/domain/entities/projects/project.entity';
 import { FindEligibleProjectsRepository } from '@/domain/repositories/find-eligible-projects.repository';
 import { FindIneligibleProjectsRepository } from '@/domain/repositories/find-ineligible-projects-repository';
 import {
@@ -15,7 +16,23 @@ export class PairProWithProjectUseCase {
   async pair(
     input: PairProWithProjectInput,
   ): Promise<PairProWithProjectOutput> {
-    const pro = new ProEntity(
+    const pro = this.createProEntityFromInput(input);
+    const proScore = pro.calculateScore();
+    const eligibleProjects =
+      await this.findEligibleProjectsRepository.findEligible(proScore);
+    const ineligibleProjects =
+      await this.findIneligibleProjectsRepository.findIneligible(proScore);
+    const selectedProject = this.getSelectedProject(eligibleProjects);
+    return {
+      score: proScore,
+      selectedProject: selectedProject?.title || null,
+      eligibleProjects: this.getProjectsTitles(eligibleProjects),
+      ineligibleProjects: this.getProjectsTitles(ineligibleProjects),
+    };
+  }
+
+  private createProEntityFromInput(input: PairProWithProjectInput): ProEntity {
+    return new ProEntity(
       input.age,
       input.educationLevel,
       input.pastExperiences,
@@ -23,25 +40,15 @@ export class PairProWithProjectUseCase {
       input.writingScore,
       input.referralCode,
     );
-    const proScore = pro.calculateScore();
-    const eligibleProjects =
-      await this.findEligibleProjectsRepository.findEligible(proScore);
-    const eligibleProjectsTitles = eligibleProjects.map(
-      (project) => project.title,
-    );
-    const ineligibleProjects =
-      await this.findIneligibleProjectsRepository.findIneligible(proScore);
-    const ineligibleProjectsTitles = ineligibleProjects.map(
-      (project) => project.title,
-    );
-    const selectedProject = eligibleProjects.sort(
-      (a, b) => b.minimumScore - a.minimumScore,
-    )[0]?.title;
-    return {
-      score: proScore,
-      selectedProject: selectedProject || null,
-      eligibleProjects: eligibleProjectsTitles,
-      ineligibleProjects: ineligibleProjectsTitles,
-    };
+  }
+
+  private getProjectsTitles(projects: ProjectEntity[]): string[] {
+    return projects.map((project) => project.title);
+  }
+
+  private getSelectedProject(
+    eligibleProjects: ProjectEntity[],
+  ): ProjectEntity | undefined {
+    return eligibleProjects.sort((a, b) => b.minimumScore - a.minimumScore)[0];
   }
 }
