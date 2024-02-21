@@ -1,7 +1,7 @@
-import { ProEntity } from '@/domain/entities/pro/pro.entity';
-import { ProjectEntity } from '@/domain/entities/projects/project.entity';
-import { FindEligibleProjectsRepository } from '@/domain/repositories/find-eligible-projects.repository';
-import { FindIneligibleProjectsRepository } from '@/domain/repositories/find-ineligible-projects-repository';
+import { ProEntity } from '@/domain/pro/entity/pro.entity';
+import { ProjectEntity } from '@/domain/project/entity/project.entity';
+import { FindEligibleProjectsRepository } from '@/domain/project/repository/find-eligible-projects.repository';
+import { FindIneligibleProjectsRepository } from '@/domain/project/repository/find-ineligible-projects-repository';
 import {
   PairProWithProjectInput,
   PairProWithProjectOutput,

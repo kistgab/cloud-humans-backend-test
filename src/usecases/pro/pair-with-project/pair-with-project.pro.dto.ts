@@ -1,4 +1,4 @@
-import { EducationLevel } from '@/domain/enums/education-levels.enum';
+import { EducationLevel } from '@/domain/pro/enums/education-levels.enum';
 
 export interface PairProWithProjectInput {
   age: number;

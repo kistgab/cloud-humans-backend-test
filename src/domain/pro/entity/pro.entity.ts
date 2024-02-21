@@ -1,8 +1,8 @@
 import {
   ProInternetTest,
   ProPastExperiences,
-} from '@/domain/entities/pro/pro-attributes';
-import { EducationLevel } from '@/domain/enums/education-levels.enum';
+} from '@/domain/pro/entity/pro-attributes';
+import { EducationLevel } from '@/domain/pro/enums/education-levels.enum';
 
 export class ProEntity {
   private readonly MINIMUM_AGE = 18;

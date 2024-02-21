@@ -1,5 +1,5 @@
-import { ProEntity } from '@/domain/entities/pro/pro.entity';
-import { EducationLevel } from '@/domain/enums/education-levels.enum';
+import { ProEntity } from '@/domain/pro/entity/pro.entity';
+import { EducationLevel } from '@/domain/pro/enums/education-levels.enum';
 
 function createSut(customProps?: Partial<ProEntity>) {
   return new ProEntity(

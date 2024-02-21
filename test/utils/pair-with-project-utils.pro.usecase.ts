@@ -1,5 +1,5 @@
-import { ProjectEntity } from '@/domain/entities/projects/project.entity';
-import { EducationLevel } from '@/domain/enums/education-levels.enum';
+import { EducationLevel } from '@/domain/pro/enums/education-levels.enum';
+import { ProjectEntity } from '@/domain/project/entity/project.entity';
 import { PairProWithProjectInput } from '@/usecases/pro/pair-with-project/pair-with-project.pro.dto';
 
 export function createFakePairWithProjectInput(

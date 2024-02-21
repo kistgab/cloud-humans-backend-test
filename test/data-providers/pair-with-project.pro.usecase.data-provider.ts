@@ -1,6 +1,6 @@
-import { EducationLevel } from '@/domain/enums/education-levels.enum';
-import { FindEligibleProjectsRepository } from '@/domain/repositories/find-eligible-projects.repository';
-import { FindIneligibleProjectsRepository } from '@/domain/repositories/find-ineligible-projects-repository';
+import { EducationLevel } from '@/domain/pro/enums/education-levels.enum';
+import { FindEligibleProjectsRepository } from '@/domain/project/repository/find-eligible-projects.repository';
+import { FindIneligibleProjectsRepository } from '@/domain/project/repository/find-ineligible-projects-repository';
 import {
   PairProWithProjectInput,
   PairProWithProjectOutput,
