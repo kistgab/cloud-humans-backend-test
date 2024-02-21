@@ -109,6 +109,19 @@ describe('PairProWithProject - Use Case', () => {
     expect(calculateScoreSpy).toHaveBeenCalledTimes(1);
   });
 
+  it('should throw if the ProEntity throws', async () => {
+    jest
+      .spyOn(ProEntity.prototype, 'calculateScore')
+      .mockImplementationOnce(() => {
+        throw new Error('ProEntity error');
+      });
+    const { sut } = createSut();
+
+    const promise = sut.pair(createFakePairWithProjectInput());
+
+    expect(promise).rejects.toThrow('ProEntity error');
+  });
+
   describe('should pair the pro with the project', () => {
     it.each(pairWithProjectDataProvider)(
       "'$pairedProjectTitle'",
