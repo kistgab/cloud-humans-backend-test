@@ -109,15 +109,17 @@ describe('PairProWithProject - Use Case', () => {
     expect(calculateScoreSpy).toHaveBeenCalledTimes(1);
   });
 
-  it.each(pairWithProjectDataProvider)(
-    "should pair the Pro to the project '$pairedProjectTitle'",
-    async ({ expectedResult, input, mocksCallback }) => {
-      const { sut, ...stubs } = createSut();
-      mocksCallback && mocksCallback(stubs);
+  describe('should pair the pro with the project', () => {
+    it.each(pairWithProjectDataProvider)(
+      "'$pairedProjectTitle'",
+      async ({ expectedResult, input, mocksCallback }) => {
+        const { sut, ...stubs } = createSut();
+        mocksCallback && mocksCallback(stubs);
 
-      const result = await sut.pair(input);
+        const result = await sut.pair(input);
 
-      expect(result).toEqual(expectedResult);
-    },
-  );
+        expect(result).toEqual(expectedResult);
+      },
+    );
+  });
 });

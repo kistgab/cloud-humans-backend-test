@@ -14,7 +14,7 @@ const schrodingerCatIsAliveEligibleProjects = createFakeProjects()
   .map((p) => p.title)
   .filter((p) => p !== 'calculate_dark_matter_nasa');
 
-function mocksCallbackSchrodingerCatIsAlive(stubs: {
+function schrodingerCatIsAliveMocksCallback(stubs: {
   findEligibleProjectsRepositoryStub: FindEligibleProjectsRepository;
   findIneligibleProjectsRepositoryStub: FindIneligibleProjectsRepository;
 }): void {
@@ -39,12 +39,50 @@ function mocksCallbackSchrodingerCatIsAlive(stubs: {
 }
 
 const schrodingerCatIsAliveInput = createFakePairWithProjectInput({
-  age: 35,
   educationLevel: EducationLevel.HighSchool,
   pastExperiences: { sales: false, support: true },
   writingScore: 0.6,
   internetTest: {
     downloadSpeed: 50.4,
+    uploadSpeed: 40.2,
+  },
+  referralCode: 'token1234',
+});
+
+function supportUsersMocksCallback(stubs: {
+  findEligibleProjectsRepositoryStub: FindEligibleProjectsRepository;
+  findIneligibleProjectsRepositoryStub: FindIneligibleProjectsRepository;
+}): void {
+  jest
+    .spyOn(stubs.findEligibleProjectsRepositoryStub!, 'findEligible')
+    .mockReturnValueOnce(
+      Promise.resolve(
+        createFakeProjects().filter(
+          (p) =>
+            p.title !== 'determine_schrodinger_cat_is_alive' &&
+            p.title !== 'calculate_dark_matter_nasa',
+        ),
+      ),
+    );
+  jest
+    .spyOn(stubs.findIneligibleProjectsRepositoryStub!, 'findIneligible')
+    .mockReturnValueOnce(
+      Promise.resolve(
+        createFakeProjects().filter(
+          (p) =>
+            p.title === 'determine_schrodinger_cat_is_alive' ||
+            p.title === 'calculate_dark_matter_nasa',
+        ),
+      ),
+    );
+}
+
+const supportUsersInput = createFakePairWithProjectInput({
+  educationLevel: EducationLevel.HighSchool,
+  pastExperiences: { sales: false, support: false },
+  writingScore: 0.6,
+  internetTest: {
+    downloadSpeed: 50.2,
     uploadSpeed: 40.2,
   },
   referralCode: 'token1234',
@@ -80,6 +118,23 @@ export const pairWithProjectDataProvider: PairWithProjectDataProvider[] = [
     },
     pairedProjectTitle: 'determine_schrodinger_cat_is_alive',
     input: schrodingerCatIsAliveInput,
-    mocksCallback: mocksCallbackSchrodingerCatIsAlive,
+    mocksCallback: schrodingerCatIsAliveMocksCallback,
+  },
+  {
+    expectedResult: {
+      score: 4,
+      selectedProject: 'support_users_from_xyz',
+      eligibleProjects: [
+        'support_users_from_xyz',
+        'collect_information_for_xpto',
+      ],
+      ineligibleProjects: [
+        'calculate_dark_matter_nasa',
+        'determine_schrodinger_cat_is_alive',
+      ],
+    },
+    pairedProjectTitle: 'support_users_from_xyz',
+    input: supportUsersInput,
+    mocksCallback: supportUsersMocksCallback,
   },
 ];
