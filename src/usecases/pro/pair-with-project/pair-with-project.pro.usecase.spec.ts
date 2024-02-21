@@ -1,39 +1,13 @@
 import { ProEntity } from '@/domain/entities/pro/pro.entity';
 import { ProjectEntity } from '@/domain/entities/projects/project.entity';
-import { EducationLevel } from '@/domain/enums/education-levels.enum';
-import { Project } from '@/domain/enums/projects.enum';
 import { FindEligibleProjectsRepository } from '@/domain/repositories/find-eligible-projects.repository';
 import { FindIneligibleProjectsRepository } from '@/domain/repositories/find-ineligible-projects-repository';
-import {
-  PairProWithProjectInput,
-  PairProWithProjectOutput,
-} from '@/usecases/pro/pair-with-project/pair-with-project.pro.dto';
 import { PairProWithProjectUseCase } from '@/usecases/pro/pair-with-project/pair-with-project.pro.usecase';
-
-function createFakeProjects(): ProjectEntity[] {
-  return [
-    new ProjectEntity(
-      'calculate_dark_matter_nasa',
-      10,
-      'Calculate the Dark Matter of the universe for Nasa',
-    ),
-    new ProjectEntity(
-      'determine_schrodinger_cat_is_alive',
-      5,
-      "Determine if the Schrodinger's cat is alive",
-    ),
-    new ProjectEntity(
-      'support_users_from_xyz',
-      3,
-      'Attend to users support for a YXZ Company',
-    ),
-    new ProjectEntity(
-      'collect_information_for_xpto',
-      2,
-      'Collect specific people information from their social media for XPTO Company',
-    ),
-  ];
-}
+import { pairWithProjectDataProvider } from '@test/data-providers/pair-with-project.pro.usecase.data-provider';
+import {
+  createFakePairWithProjectInput,
+  createFakeProjects,
+} from '@test/utils/pair-with-project-utils.pro.usecase';
 
 function createFindEligibleProjectsRepositoryStub(): FindEligibleProjectsRepository {
   class FindEligibleProjectsRepositoryStub
@@ -79,45 +53,6 @@ function createSut(): SutTypes {
   };
 }
 
-function createFakeInput(
-  customProps?: Partial<PairProWithProjectInput>,
-): PairProWithProjectInput {
-  return {
-    age: customProps?.age || 25,
-    educationLevel:
-      customProps?.educationLevel || EducationLevel.BachelorsDegreeOrHigher,
-    pastExperiences: customProps?.pastExperiences || {
-      sales: true,
-      support: true,
-    },
-    internetTest: customProps?.internetTest || {
-      downloadSpeed: 100,
-      uploadSpeed: 100,
-    },
-    writingScore: customProps?.writingScore || 1,
-    referralCode: customProps?.referralCode || 'token1234',
-  };
-}
-
-interface PairWithProjectDataProvider {
-  input: PairProWithProjectInput;
-  expectedResult: PairProWithProjectOutput;
-  pairedProject: Project;
-}
-
-const pairWithProjectDataProvider: PairWithProjectDataProvider[] = [
-  {
-    expectedResult: {
-      score: 15,
-      selectedProject: Project.CalculateDarkMatterNasa,
-      eligibleProjects: createFakeProjects().map((p) => p.title),
-      ineligibleProjects: [],
-    },
-    pairedProject: Project.CalculateDarkMatterNasa,
-    input: createFakeInput(),
-  },
-];
-
 describe('PairProWithProject - Use Case', () => {
   it('should call the FindEligibleProjectsRepository with correct value', async () => {
     const { sut, findEligibleProjectsRepositoryStub } = createSut();
@@ -126,7 +61,7 @@ describe('PairProWithProject - Use Case', () => {
       'findEligible',
     );
 
-    await sut.pair(createFakeInput());
+    await sut.pair(createFakePairWithProjectInput());
 
     expect(findEligibleSpy).toHaveBeenCalledWith(15);
   });
@@ -137,7 +72,7 @@ describe('PairProWithProject - Use Case', () => {
       .spyOn(findEligibleProjectsRepositoryStub, 'findEligible')
       .mockReturnValueOnce(Promise.reject(new Error('Repository error')));
 
-    const promise = sut.pair(createFakeInput());
+    const promise = sut.pair(createFakePairWithProjectInput());
 
     expect(promise).rejects.toThrow('Repository error');
   });
@@ -149,7 +84,7 @@ describe('PairProWithProject - Use Case', () => {
       'findIneligible',
     );
 
-    await sut.pair(createFakeInput());
+    await sut.pair(createFakePairWithProjectInput());
 
     expect(findIneligibleSpy).toHaveBeenCalledWith(15);
   });
@@ -160,7 +95,7 @@ describe('PairProWithProject - Use Case', () => {
       .spyOn(findIneligibleProjectsRepositoryStub, 'findIneligible')
       .mockReturnValueOnce(Promise.reject(new Error('Repository error')));
 
-    const promise = sut.pair(createFakeInput());
+    const promise = sut.pair(createFakePairWithProjectInput());
 
     expect(promise).rejects.toThrow('Repository error');
   });
@@ -169,15 +104,16 @@ describe('PairProWithProject - Use Case', () => {
     const calculateScoreSpy = jest.spyOn(ProEntity.prototype, 'calculateScore');
     const { sut } = createSut();
 
-    await sut.pair(createFakeInput());
+    await sut.pair(createFakePairWithProjectInput());
 
     expect(calculateScoreSpy).toHaveBeenCalledTimes(1);
   });
 
   it.each(pairWithProjectDataProvider)(
-    'should pair the Pro to the project "$pairedProject"',
-    async ({ expectedResult, input }) => {
-      const { sut } = createSut();
+    "should pair the Pro to the project '$pairedProjectTitle'",
+    async ({ expectedResult, input, mocksCallback }) => {
+      const { sut, ...stubs } = createSut();
+      mocksCallback && mocksCallback(stubs);
 
       const result = await sut.pair(input);
 
