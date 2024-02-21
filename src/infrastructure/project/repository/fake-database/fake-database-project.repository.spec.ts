@@ -7,7 +7,7 @@ import { ProjectModel } from './project.model';
 function createFakeProject(): ProjectModel {
   return {
     title: 'any_title',
-    minimum_score: 15,
+    minimum_score: 5,
     description: 'any_description',
   };
 }
@@ -52,7 +52,7 @@ describe('FakeDatabaseProject - Repository', () => {
 
       expect(result.length).toBe(1);
       expect(result[0]).toEqual(
-        new ProjectEntity('any_title', 15, 'any_description'),
+        new ProjectEntity('any_title', 5, 'any_description'),
       );
     });
   });

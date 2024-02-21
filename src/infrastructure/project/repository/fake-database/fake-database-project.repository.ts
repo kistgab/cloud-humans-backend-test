@@ -8,10 +8,11 @@ export class FakeDatabaseProjectRepository
   implements FindEligibleProjectsRepository
 {
   async findAllEligibles(score: number): Promise<ProjectEntity[]> {
-    score;
     const projectsData = this.loadProjects();
-    const projects = projectsData.map(ProjectMapper.toEntity);
-    return projects;
+    const eligibleProjects = projectsData
+      .filter((project) => project.minimum_score < score)
+      .map(ProjectMapper.toEntity);
+    return eligibleProjects;
   }
 
   private loadProjects(): ProjectModel[] {
