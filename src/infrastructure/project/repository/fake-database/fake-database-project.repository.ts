@@ -17,12 +17,11 @@ export class FakeDatabaseProjectRepository
   }
 
   async findAllIneligibles(proScore: number): Promise<ProjectEntity[]> {
-    proScore;
     const projectsData = this.loadProjects();
-    projectsData
+    const ineligibleProjects = projectsData
       .filter((project) => proScore <= project.minimum_score)
       .map(ProjectMapper.toEntity);
-    return [];
+    return ineligibleProjects;
   }
 
   private loadProjects(): ProjectModel[] {
