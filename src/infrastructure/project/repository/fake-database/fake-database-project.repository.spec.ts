@@ -14,6 +14,7 @@ function createFakeProject(): ProjectModel {
 
 describe('FakeDatabaseProject - Repository', () => {
   beforeEach(() => {
+    jest.restoreAllMocks();
     jest.spyOn(fs, 'readFileSync').mockReturnValueOnce('any_value');
     jest
       .spyOn(JSON, 'parse')
@@ -68,6 +69,18 @@ describe('FakeDatabaseProject - Repository', () => {
         'data/static-projects.json',
         'utf-8',
       );
+    });
+
+    it('should call the mapper with correct values', async () => {
+      const sut = new FakeDatabaseProjectRepository();
+      const mapperSpy = jest.spyOn(ProjectMapper, 'toEntity');
+
+      await sut.findAllIneligibles(3);
+
+      expect(mapperSpy).toHaveBeenCalledWith(createFakeProject(), 0, [
+        createFakeProject(),
+      ]);
+      expect(mapperSpy).toHaveBeenCalledTimes(1);
     });
   });
 });
