@@ -11,7 +11,9 @@ export class PairProWithProjectUseCase {
     private readonly findEligibleProjectsRepository: FindEligibleProjectsRepository,
   ) {}
 
-  pair(input: PairProWithProjectInput): PairProWithProjectOutput {
+  async pair(
+    input: PairProWithProjectInput,
+  ): Promise<PairProWithProjectOutput> {
     const pro = new ProEntity(
       input.age,
       input.educationLevel,
@@ -21,7 +23,7 @@ export class PairProWithProjectUseCase {
       input.referralCode,
     );
     const proScore = pro.calculateScore();
-    this.findEligibleProjectsRepository.findEligible(proScore);
+    await this.findEligibleProjectsRepository.findEligible(proScore);
     return {
       score: proScore,
       selectedProject: Project.CalculateDarkMatterNasa,
