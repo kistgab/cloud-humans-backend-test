@@ -1,7 +1,8 @@
+import { ProjectEntity } from '@/domain/project/entity/project.entity';
 import { ProjectMapper } from '@/infrastructure/project/mapper/project.mapper';
 import { FakeDatabaseProjectRepository } from '@/infrastructure/project/repository/fake-database/fake-database-project.repository';
-import { ProjectModel } from '@/infrastructure/project/repository/fake-database/project.model';
 import * as fs from 'fs';
+import { ProjectModel } from './project.model';
 
 function createFakeProject(): ProjectModel {
   return {
@@ -12,6 +13,13 @@ function createFakeProject(): ProjectModel {
 }
 
 describe('FakeDatabaseProject - Repository', () => {
+  beforeEach(() => {
+    jest.spyOn(fs, 'readFileSync').mockReturnValueOnce('any_value');
+    jest
+      .spyOn(JSON, 'parse')
+      .mockReturnValueOnce({ projects: [createFakeProject()] });
+  });
+
   describe('findAllEligibles', () => {
     it('should load the json correctly', async () => {
       const sut = new FakeDatabaseProjectRepository();
@@ -26,9 +34,6 @@ describe('FakeDatabaseProject - Repository', () => {
     });
 
     it('should call the mapper with correct values', async () => {
-      jest
-        .spyOn(JSON, 'parse')
-        .mockReturnValueOnce({ projects: [createFakeProject()] });
       const sut = new FakeDatabaseProjectRepository();
       const mapperSpy = jest.spyOn(ProjectMapper, 'toEntity');
 
@@ -36,6 +41,17 @@ describe('FakeDatabaseProject - Repository', () => {
 
       expect(mapperSpy).toHaveBeenCalledWith(createFakeProject());
       expect(mapperSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return an list of Projects on success', async () => {
+      const sut = new FakeDatabaseProjectRepository();
+
+      const result = await sut.findAllEligibles(15);
+
+      expect(result.length).toBe(1);
+      expect(result[0]).toEqual(
+        new ProjectEntity('any_title', 15, 'any_description'),
+      );
     });
   });
 });
