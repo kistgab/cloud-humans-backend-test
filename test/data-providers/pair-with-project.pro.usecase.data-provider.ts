@@ -10,83 +10,137 @@ import {
   createFakeProjects,
 } from '@test/utils/pair-with-project-utils.pro.usecase';
 
-const schrodingerCatIsAliveEligibleProjects = createFakeProjects()
-  .map((p) => p.title)
-  .filter((p) => p !== 'calculate_dark_matter_nasa');
-
-function schrodingerCatIsAliveMocksCallback(stubs: {
-  findEligibleProjectsRepositoryStub: FindEligibleProjectsRepository;
-  findIneligibleProjectsRepositoryStub: FindIneligibleProjectsRepository;
-}): void {
-  jest
-    .spyOn(stubs.findEligibleProjectsRepositoryStub!, 'findEligible')
-    .mockReturnValueOnce(
-      Promise.resolve(
-        createFakeProjects().filter(
-          (p) => p.title !== 'calculate_dark_matter_nasa',
+abstract class SchrodingerCatData {
+  private static eligibleProjects = createFakeProjects()
+    .map((p) => p.title)
+    .filter((p) => p !== 'calculate_dark_matter_nasa');
+  private static selectedProject = 'determine_schrodinger_cat_is_alive';
+  private static ineligibleProjects = ['calculate_dark_matter_nasa'];
+  private static expectedScore = 7;
+  private static input = createFakePairWithProjectInput({
+    educationLevel: EducationLevel.HighSchool,
+    pastExperiences: { sales: false, support: true },
+    writingScore: 0.6,
+    internetTest: {
+      downloadSpeed: 50.4,
+      uploadSpeed: 40.2,
+    },
+    referralCode: 'token1234',
+  });
+  private static mocksCallback(stubs: {
+    findEligibleProjectsRepositoryStub: FindEligibleProjectsRepository;
+    findIneligibleProjectsRepositoryStub: FindIneligibleProjectsRepository;
+  }): void {
+    jest
+      .spyOn(stubs.findEligibleProjectsRepositoryStub!, 'findEligible')
+      .mockReturnValueOnce(
+        Promise.resolve(
+          createFakeProjects().filter(
+            (p) => p.title !== 'calculate_dark_matter_nasa',
+          ),
         ),
-      ),
-    );
-  jest
-    .spyOn(stubs.findIneligibleProjectsRepositoryStub!, 'findIneligible')
-    .mockReturnValueOnce(
-      Promise.resolve([
-        createFakeProjects().find(
-          (p) => p.title === 'calculate_dark_matter_nasa',
-        )!,
-      ]),
-    );
+      );
+    jest
+      .spyOn(stubs.findIneligibleProjectsRepositoryStub!, 'findIneligible')
+      .mockReturnValueOnce(
+        Promise.resolve([
+          createFakeProjects().find(
+            (p) => p.title === 'calculate_dark_matter_nasa',
+          )!,
+        ]),
+      );
+  }
+  static dataProviderRecord: PairWithProjectDataProvider = {
+    expectedResult: {
+      score: this.expectedScore,
+      selectedProject: this.selectedProject,
+      eligibleProjects: this.eligibleProjects,
+      ineligibleProjects: this.ineligibleProjects,
+    },
+    pairedProjectTitle: this.selectedProject,
+    input: this.input,
+    mocksCallback: this.mocksCallback,
+  };
 }
 
-const schrodingerCatIsAliveInput = createFakePairWithProjectInput({
-  educationLevel: EducationLevel.HighSchool,
-  pastExperiences: { sales: false, support: true },
-  writingScore: 0.6,
-  internetTest: {
-    downloadSpeed: 50.4,
-    uploadSpeed: 40.2,
-  },
-  referralCode: 'token1234',
-});
-
-function supportUsersMocksCallback(stubs: {
-  findEligibleProjectsRepositoryStub: FindEligibleProjectsRepository;
-  findIneligibleProjectsRepositoryStub: FindIneligibleProjectsRepository;
-}): void {
-  jest
-    .spyOn(stubs.findEligibleProjectsRepositoryStub!, 'findEligible')
-    .mockReturnValueOnce(
-      Promise.resolve(
-        createFakeProjects().filter(
-          (p) =>
-            p.title !== 'determine_schrodinger_cat_is_alive' &&
-            p.title !== 'calculate_dark_matter_nasa',
+abstract class SupportUsersData {
+  private static eligibleProjects = [
+    'support_users_from_xyz',
+    'collect_information_for_xpto',
+  ];
+  private static ineligibleProjects = [
+    'calculate_dark_matter_nasa',
+    'determine_schrodinger_cat_is_alive',
+  ];
+  private static selectedProject = 'support_users_from_xyz';
+  private static expectedScore = 4;
+  private static input = createFakePairWithProjectInput({
+    educationLevel: EducationLevel.HighSchool,
+    pastExperiences: { sales: false, support: false },
+    writingScore: 0.6,
+    internetTest: {
+      downloadSpeed: 50.2,
+      uploadSpeed: 40.2,
+    },
+    referralCode: 'token1234',
+  });
+  private static mocksCallback(stubs: {
+    findEligibleProjectsRepositoryStub: FindEligibleProjectsRepository;
+    findIneligibleProjectsRepositoryStub: FindIneligibleProjectsRepository;
+  }): void {
+    jest
+      .spyOn(stubs.findEligibleProjectsRepositoryStub!, 'findEligible')
+      .mockReturnValueOnce(
+        Promise.resolve(
+          createFakeProjects().filter(
+            (p) =>
+              p.title !== 'determine_schrodinger_cat_is_alive' &&
+              p.title !== 'calculate_dark_matter_nasa',
+          ),
         ),
-      ),
-    );
-  jest
-    .spyOn(stubs.findIneligibleProjectsRepositoryStub!, 'findIneligible')
-    .mockReturnValueOnce(
-      Promise.resolve(
-        createFakeProjects().filter(
-          (p) =>
-            p.title === 'determine_schrodinger_cat_is_alive' ||
-            p.title === 'calculate_dark_matter_nasa',
+      );
+    jest
+      .spyOn(stubs.findIneligibleProjectsRepositoryStub!, 'findIneligible')
+      .mockReturnValueOnce(
+        Promise.resolve(
+          createFakeProjects().filter(
+            (p) =>
+              p.title === 'determine_schrodinger_cat_is_alive' ||
+              p.title === 'calculate_dark_matter_nasa',
+          ),
         ),
-      ),
-    );
+      );
+  }
+  static dataProviderRecord: PairWithProjectDataProvider = {
+    expectedResult: {
+      score: this.expectedScore,
+      selectedProject: this.selectedProject,
+      eligibleProjects: this.eligibleProjects,
+      ineligibleProjects: this.ineligibleProjects,
+    },
+    pairedProjectTitle: this.selectedProject,
+    input: this.input,
+    mocksCallback: this.mocksCallback,
+  };
 }
 
-const supportUsersInput = createFakePairWithProjectInput({
-  educationLevel: EducationLevel.HighSchool,
-  pastExperiences: { sales: false, support: false },
-  writingScore: 0.6,
-  internetTest: {
-    downloadSpeed: 50.2,
-    uploadSpeed: 40.2,
-  },
-  referralCode: 'token1234',
-});
+abstract class CalculateDarkMatterData {
+  private static eligibleProjects = createFakeProjects().map((p) => p.title);
+  private static ineligibleProjects = [];
+  private static selectedProject = 'calculate_dark_matter_nasa';
+  private static expectedScore = 15;
+  private static input = createFakePairWithProjectInput();
+  static dataProviderRecord: PairWithProjectDataProvider = {
+    expectedResult: {
+      score: this.expectedScore,
+      selectedProject: this.selectedProject,
+      eligibleProjects: this.eligibleProjects,
+      ineligibleProjects: this.ineligibleProjects,
+    },
+    pairedProjectTitle: this.selectedProject,
+    input: this.input,
+  };
+}
 
 interface PairWithProjectDataProvider {
   input: PairProWithProjectInput;
@@ -99,42 +153,7 @@ interface PairWithProjectDataProvider {
 }
 
 export const pairWithProjectDataProvider: PairWithProjectDataProvider[] = [
-  {
-    expectedResult: {
-      score: 15,
-      selectedProject: 'calculate_dark_matter_nasa',
-      eligibleProjects: createFakeProjects().map((p) => p.title),
-      ineligibleProjects: [],
-    },
-    pairedProjectTitle: 'calculate_dark_matter_nasa',
-    input: createFakePairWithProjectInput(),
-  },
-  {
-    expectedResult: {
-      score: 7,
-      selectedProject: 'determine_schrodinger_cat_is_alive',
-      eligibleProjects: schrodingerCatIsAliveEligibleProjects,
-      ineligibleProjects: ['calculate_dark_matter_nasa'],
-    },
-    pairedProjectTitle: 'determine_schrodinger_cat_is_alive',
-    input: schrodingerCatIsAliveInput,
-    mocksCallback: schrodingerCatIsAliveMocksCallback,
-  },
-  {
-    expectedResult: {
-      score: 4,
-      selectedProject: 'support_users_from_xyz',
-      eligibleProjects: [
-        'support_users_from_xyz',
-        'collect_information_for_xpto',
-      ],
-      ineligibleProjects: [
-        'calculate_dark_matter_nasa',
-        'determine_schrodinger_cat_is_alive',
-      ],
-    },
-    pairedProjectTitle: 'support_users_from_xyz',
-    input: supportUsersInput,
-    mocksCallback: supportUsersMocksCallback,
-  },
+  CalculateDarkMatterData.dataProviderRecord,
+  SchrodingerCatData.dataProviderRecord,
+  SupportUsersData.dataProviderRecord,
 ];
