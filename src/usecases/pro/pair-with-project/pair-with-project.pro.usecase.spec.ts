@@ -31,6 +31,30 @@ function createFakeInput(
   };
 }
 
+interface PairWithProjectDataProvider {
+  input: PairProWithProjectInput;
+  expectedResult: PairProWithProjectOutput;
+  pairedProject: Project;
+}
+
+const pairWithProjectDataProvider: PairWithProjectDataProvider[] = [
+  {
+    expectedResult: {
+      score: 15,
+      selectedProject: Project.CalculateDarkMatterNasa,
+      eligibleProjects: [
+        Project.CalculateDarkMatterNasa,
+        Project.CollectInformationForXpto,
+        Project.DetermineSchrodingerCatIsAlive,
+        Project.SupportUsersFromXyz,
+      ],
+      ineligibleProjects: [],
+    },
+    pairedProject: Project.CalculateDarkMatterNasa,
+    input: createFakeInput(),
+  },
+];
+
 describe('PairProWithProject - Use Case', () => {
   it('should call the ProEntity to calculate the Pro score', () => {
     const calculateScoreSpy = jest.spyOn(ProEntity.prototype, 'calculateScore');
@@ -41,22 +65,14 @@ describe('PairProWithProject - Use Case', () => {
     expect(calculateScoreSpy).toHaveBeenCalledTimes(1);
   });
 
-  it("should pair the Pro to the project 'calculate_dark_matter_nasa' when have the necessary score", () => {
-    const sut = createSut();
+  it.each(pairWithProjectDataProvider)(
+    'should pair the Pro to the project "$pairedProject"',
+    ({ expectedResult, input }) => {
+      const sut = createSut();
 
-    const result = sut.pair(createFakeInput());
+      const result = sut.pair(input);
 
-    const expectedResult: PairProWithProjectOutput = {
-      score: 15,
-      selectedProject: Project.CalculateDarkMatterNasa,
-      eligibleProjects: [
-        Project.CalculateDarkMatterNasa,
-        Project.CollectInformationForXpto,
-        Project.DetermineSchrodingerCatIsAlive,
-        Project.SupportUsersFromXyz,
-      ],
-      ineligibleProjects: [],
-    };
-    expect(result).toEqual(expectedResult);
-  });
+      expect(result).toEqual(expectedResult);
+    },
+  );
 });
