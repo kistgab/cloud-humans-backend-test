@@ -10,9 +10,7 @@ export class FakeDatabaseProjectRepository
   async findAllEligibles(score: number): Promise<ProjectEntity[]> {
     score;
     const projectsData = this.loadProjects();
-    const projects = projectsData.map((project) =>
-      ProjectMapper.toEntity(project),
-    );
+    const projects = projectsData.map(ProjectMapper.toEntity);
     return projects;
   }
 

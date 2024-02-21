@@ -39,7 +39,9 @@ describe('FakeDatabaseProject - Repository', () => {
 
       await sut.findAllEligibles(15);
 
-      expect(mapperSpy).toHaveBeenCalledWith(createFakeProject());
+      expect(mapperSpy).toHaveBeenCalledWith(createFakeProject(), 0, [
+        createFakeProject(),
+      ]);
       expect(mapperSpy).toHaveBeenCalledTimes(1);
     });
 
