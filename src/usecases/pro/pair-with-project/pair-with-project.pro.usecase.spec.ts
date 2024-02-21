@@ -154,6 +154,17 @@ describe('PairProWithProject - Use Case', () => {
     expect(findIneligibleSpy).toHaveBeenCalledWith(15);
   });
 
+  it('should throw if FindIneligibleProjectsRepository throws', () => {
+    const { sut, findIneligibleProjectsRepositoryStub } = createSut();
+    jest
+      .spyOn(findIneligibleProjectsRepositoryStub, 'findIneligible')
+      .mockReturnValueOnce(Promise.reject(new Error('Repository error')));
+
+    const promise = sut.pair(createFakeInput());
+
+    expect(promise).rejects.toThrow('Repository error');
+  });
+
   it('should call the ProEntity to calculate the Pro score', async () => {
     const calculateScoreSpy = jest.spyOn(ProEntity.prototype, 'calculateScore');
     const { sut } = createSut();
