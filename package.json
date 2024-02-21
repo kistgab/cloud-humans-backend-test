@@ -15,8 +15,9 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:unit": "npm test -- --watch",
-    "test:e2e": "npm test -- --watch -c jest-e2e.json",
+    "test:unit": "npm test -- --watch -c jest-unit.config.ts",
+    "test:integration": "npm test -- --watch -c jest-integration.config.ts",
+    "test:e2e": "npm test -- --watch -c jest-e2e.config.ts",
     "test:staged": "npm test -- --findRelatedTests",
     "prepare": "husky"
   },
