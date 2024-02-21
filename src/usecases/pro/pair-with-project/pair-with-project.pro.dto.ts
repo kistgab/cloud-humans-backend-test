@@ -1,5 +1,4 @@
 import { EducationLevel } from '@/domain/enums/education-levels.enum';
-import { Project } from '@/domain/enums/projects.enum';
 
 export interface PairProWithProjectInput {
   age: number;
@@ -18,7 +17,7 @@ export interface PairProWithProjectInput {
 
 export interface PairProWithProjectOutput {
   score: number;
-  selectedProject: Project | null;
-  eligibleProjects: Project[];
-  ineligibleProjects: Project[];
+  selectedProject: string | null;
+  eligibleProjects: string[];
+  ineligibleProjects: string[];
 }

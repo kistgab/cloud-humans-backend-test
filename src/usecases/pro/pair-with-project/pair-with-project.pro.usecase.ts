@@ -23,16 +23,15 @@ export class PairProWithProjectUseCase {
       input.referralCode,
     );
     const proScore = pro.calculateScore();
-    await this.findEligibleProjectsRepository.findEligible(proScore);
+    const eligibleProjects =
+      await this.findEligibleProjectsRepository.findEligible(proScore);
+    const eligibleProjectsTitles = eligibleProjects.map(
+      (project) => project.title,
+    );
     return {
       score: proScore,
       selectedProject: Project.CalculateDarkMatterNasa,
-      eligibleProjects: [
-        Project.CalculateDarkMatterNasa,
-        Project.CollectInformationForXpto,
-        Project.DetermineSchrodingerCatIsAlive,
-        Project.SupportUsersFromXyz,
-      ],
+      eligibleProjects: eligibleProjectsTitles,
       ineligibleProjects: [],
     };
   }
