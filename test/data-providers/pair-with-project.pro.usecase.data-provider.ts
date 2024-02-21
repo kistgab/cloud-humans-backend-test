@@ -71,4 +71,15 @@ export const pairWithProjectDataProvider: PairWithProjectDataProvider[] = [
     pairedProjectTitle: 'calculate_dark_matter_nasa',
     input: createFakePairWithProjectInput(),
   },
+  {
+    expectedResult: {
+      score: 7,
+      selectedProject: 'determine_schrodinger_cat_is_alive',
+      eligibleProjects: schrodingerCatIsAliveEligibleProjects,
+      ineligibleProjects: ['calculate_dark_matter_nasa'],
+    },
+    pairedProjectTitle: 'determine_schrodinger_cat_is_alive',
+    input: schrodingerCatIsAliveInput,
+    mocksCallback: mocksCallbackSchrodingerCatIsAlive,
+  },
 ];
