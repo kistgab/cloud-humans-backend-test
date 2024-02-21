@@ -7,9 +7,10 @@ export default {
   testEnvironment: 'node',
   modulePaths: [compilerOptions.baseUrl],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
-  coverageDirectory: '../coverage',
+  coverageDirectory: 'coverage',
   moduleFileExtensions: ['js', 'json', 'ts'],
   testRegex: '.*\\.spec\\.ts$',
   transform: { '^.+\\.(t|j)s$': 'ts-jest' },
-  collectCoverageFrom: ['**/*.(t|j)s'],
+  collectCoverageFrom: ['<rootDir>/src/**/*.(t|j)s'],
+  modulePathIgnorePatterns: ['<rootDir>/test/'],
 };
