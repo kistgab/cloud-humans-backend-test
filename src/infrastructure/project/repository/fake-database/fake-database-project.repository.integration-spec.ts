@@ -32,5 +32,13 @@ describe('FakeDatabaseProject - Repository', () => {
 
       expect(projects).toEqual(allEligibleProjects);
     });
+
+    it('should return no projects', async () => {
+      const sut = createSut();
+
+      const projects = await sut.findAllEligibles(0);
+
+      expect(projects).toHaveLength(0);
+    });
   });
 });
