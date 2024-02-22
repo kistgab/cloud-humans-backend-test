@@ -56,4 +56,17 @@ describe('PairProWithProject - Controller', () => {
 
     expect(pairSpy).toHaveBeenCalledTimes(1);
   });
+
+  it('should throw if usecase factory throws', async () => {
+    const sut = createSut();
+    jest
+      .spyOn(PairProWithProjectUseCaseFactory, 'create')
+      .mockImplementationOnce(() => {
+        throw new Error('Factory error');
+      });
+
+    const promise = sut.handle(createFakeInput());
+
+    expect(promise).rejects.toThrow('Factory error');
+  });
 });
