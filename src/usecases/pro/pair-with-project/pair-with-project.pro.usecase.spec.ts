@@ -153,6 +153,19 @@ describe('PairProWithProject - Use Case', () => {
     expect(isValidReferralCodeSpy).toHaveBeenCalledWith('any_token');
   });
 
+  it('should throw if IsValidReferralCodeRepository throws', () => {
+    const { sut, isValidReferralCodeRepositoryStub } = createSut();
+    jest
+      .spyOn(isValidReferralCodeRepositoryStub, 'isValidReferralCode')
+      .mockReturnValueOnce(
+        Promise.reject(new Error('IsValidReferralCodeRepository error')),
+      );
+
+    const promise = sut.pair(createFakePairWithProjectInput());
+
+    expect(promise).rejects.toThrow('IsValidReferralCodeRepository error');
+  });
+
   describe('should pair the pro with the project', () => {
     it.each(pairWithProjectDataProvider)(
       "'$pairedProjectTitle'",
