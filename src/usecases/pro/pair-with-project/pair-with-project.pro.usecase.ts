@@ -21,9 +21,7 @@ export class PairProWithProjectUseCase {
   async pair(
     input: PairProWithProjectInput,
   ): Promise<PairProWithProjectOutput> {
-    const pro = this.createProEntityFromInput(input);
-    const proScore = pro.calculateScore();
-    await this.calculateReferralCodePoints(input.referralCode);
+    const proScore = await this.calculateProScore(input);
     const eligibleProjects =
       await this.findEligibleProjectsRepository.findAllEligibles(proScore);
     const ineligibleProjects =
@@ -37,6 +35,13 @@ export class PairProWithProjectUseCase {
     };
   }
 
+  async calculateProScore(input: PairProWithProjectInput): Promise<number> {
+    const pro = this.createProEntityFromInput(input);
+    let score = pro.calculateScore();
+    score += await this.calculateReferralCodePoints(pro.referralCode);
+    return score;
+  }
+
   private createProEntityFromInput(input: PairProWithProjectInput): ProEntity {
     return new ProEntity(
       input.age,
@@ -46,16 +51,6 @@ export class PairProWithProjectUseCase {
       input.writingScore,
       input.referralCode,
     );
-  }
-
-  private getProjectsTitles(projects: ProjectEntity[]): string[] {
-    return projects.map((project) => project.title);
-  }
-
-  private getSelectedProject(
-    eligibleProjects: ProjectEntity[],
-  ): ProjectEntity | undefined {
-    return eligibleProjects.sort((a, b) => b.minimumScore - a.minimumScore)[0];
   }
 
   private async calculateReferralCodePoints(
@@ -71,5 +66,15 @@ export class PairProWithProjectUseCase {
     return isValid
       ? this.VALID_REFERRAL_CODE_POINTS
       : this.INVALID_REFERRAL_CODE_POINTS;
+  }
+
+  private getProjectsTitles(projects: ProjectEntity[]): string[] {
+    return projects.map((project) => project.title);
+  }
+
+  private getSelectedProject(
+    eligibleProjects: ProjectEntity[],
+  ): ProjectEntity | undefined {
+    return eligibleProjects.sort((a, b) => b.minimumScore - a.minimumScore)[0];
   }
 }

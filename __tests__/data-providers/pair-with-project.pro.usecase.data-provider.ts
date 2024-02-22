@@ -1,4 +1,5 @@
 import { EducationLevel } from '@/domain/pro/enums/education-levels.enum';
+import { IsValidReferralCodeRepository } from '@/domain/pro/repository/is-valid-referral-code.repository';
 import { FindEligibleProjectsRepository } from '@/domain/project/repository/find-eligible-projects.repository';
 import { FindIneligibleProjectsRepository } from '@/domain/project/repository/find-ineligible-projects-repository';
 import {
@@ -86,6 +87,7 @@ abstract class SupportUsersData {
   private static mocksCallback(stubs: {
     findEligibleProjectsRepositoryStub: FindEligibleProjectsRepository;
     findIneligibleProjectsRepositoryStub: FindIneligibleProjectsRepository;
+    isValidReferralCodeRepositoryStub: IsValidReferralCodeRepository;
   }): void {
     jest
       .spyOn(stubs.findEligibleProjectsRepositoryStub!, 'findAllEligibles')
@@ -109,6 +111,9 @@ abstract class SupportUsersData {
           ),
         ),
       );
+    jest
+      .spyOn(stubs.isValidReferralCodeRepositoryStub, 'isValidReferralCode')
+      .mockReturnValueOnce(Promise.resolve(false));
   }
   static dataProviderRecord: PairWithProjectDataProvider = {
     expectedResult: {
