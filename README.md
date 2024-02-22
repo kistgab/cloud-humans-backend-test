@@ -13,7 +13,7 @@
 
 ### Locally
 
-- Run `npm install`;
+- Run `npm install`.
 - **Production mode:** you have to run `npm run build`, `npm run start:prod`;
 - **Development mode:** you can run `npm run start` or even `npm run start:dev`;
 
@@ -21,7 +21,7 @@
 
 ### Consume API by Swagger
 
-To use Swagger you can access the address `http://localhost:3000/api` in your browser after ran the application
+To use Swagger you can access the address `http://localhost:3000/api` in your browser after running the application.
 
 ### Run tests by script
 
@@ -32,7 +32,7 @@ To run the tests you have to `npm install` all packages.
 - If you want to run only e2e tests you can run `npm run test:e2e`;
 - If you want to run all of them you can run `npm run test`.
 
-# Main Technical Decisions;
+# Main Technical Decisions
 
 - I decided to use Screaming Architecture in the project to make it looks like a Pro/Project application and not only another project that has the same layers and everything similar. Also, it makes the project more understandable.
 - I also followed some good practices like TDD, SOLID, Clean Code.
@@ -50,7 +50,7 @@ To run the tests you have to `npm install` all packages.
 ## Project Overview
 
 This project is a Pro-Project matcher. It aims to verify for which project the Pro is most qualified for.
-With that, we can automatize the proccess of deliverying projects to the pros and save a lot of time.
+With that, we can automate the proccess of deliverying projects to the pros and save a lot of time.
 
 ## Architecture
 
@@ -58,4 +58,4 @@ This project follows `Screaming Architecture` to make it more understandable and
 
 ## Contact information
 
-If you have any questions or feedback, you can reach me at gabrielkist02@gmail.com or on my GitHub profile @kistgab.
+If you have any questions or feedback, you can reach me at gabrielkist02@gmail.com or via my GitHub profile @kistgab.
