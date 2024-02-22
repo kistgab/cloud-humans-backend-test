@@ -15,7 +15,7 @@
 
 - Run `npm install`;
 - **Production mode:** you have to run `npm run build`, `npm run start:prod`;
-- **Development mode**, you can run `npm run start` or even `npm run start:dev`;
+- **Development mode:** you can run `npm run start` or even `npm run start:dev`;
 
 ## Tests
 
