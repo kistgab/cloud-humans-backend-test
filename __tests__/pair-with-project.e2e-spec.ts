@@ -1,5 +1,5 @@
 import { ProRoutes } from '@/infrastructure/api/routes/pro.routes';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 
@@ -12,6 +12,7 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe({ transform: true }));
     await app.init();
   });
 
@@ -43,6 +44,24 @@ describe('AppController (e2e)', () => {
             'collect_information_for_xpto',
           ],
           ineligible_projects: ['calculate_dark_matter_nasa'],
+        });
+    });
+
+    it('/pros/pairWithProject (POST)', () => {
+      return request(app.getHttpServer())
+        .post('/pros/pairWithProject')
+        .send({})
+        .expect(400)
+        .expect({
+          message: [
+            'age must be a number conforming to the specified constraints',
+            'education_level must be one of the following values: no_education, high_school, bachelors_degree_or_high',
+            'past_experiences must be a non-empty object',
+            'internet_test must be a non-empty object',
+            'writing_score must be a number conforming to the specified constraints',
+          ],
+          error: 'Bad Request',
+          statusCode: 400,
         });
     });
   });
