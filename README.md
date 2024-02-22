@@ -27,9 +27,9 @@ To use Swagger you can access the address `http://localhost:3000/api` in your br
 
 To run the tests you have to `npm install` all packages.
 
-- If you want to run only **unit** tests you can run `npm run test:unit`;
-- If you want to run only **integration** tests you can run `npm run test:integration`;
-- If you want to run only **e2e** tests you can run `npm run test:e2e`;
+- If you want to run only **unit** tests you can run `npm run test:unit:noWatch`;
+- If you want to run only **integration** tests you can run `npm run test:integration:noWatch`;
+- If you want to run only **e2e** tests you can run `npm run test:e2e:noWatch`;
 - If you want to run all of them you can run `npm run test`.
 
 # Main Technical Decisions
