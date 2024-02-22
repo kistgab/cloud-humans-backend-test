@@ -142,6 +142,61 @@ abstract class CalculateDarkMatterData {
   };
 }
 
+abstract class CollectInformationData {
+  private static eligibleProjects = ['collect_information_for_xpto'];
+  private static ineligibleProjects = [
+    'calculate_dark_matter_nasa',
+    'determine_schrodinger_cat_is_alive',
+    'support_users_from_xyz',
+  ];
+  private static selectedProject = 'collect_information_for_xpto';
+  private static expectedScore = 3;
+  private static input = createFakePairWithProjectInput({
+    educationLevel: EducationLevel.NoEducation,
+    pastExperiences: { sales: false, support: false },
+    writingScore: 0.6,
+    internetTest: {
+      downloadSpeed: 50.2,
+      uploadSpeed: 40.2,
+    },
+    referralCode: 'token1234',
+  });
+  private static mocksCallback(stubs: {
+    findEligibleProjectsRepositoryStub: FindEligibleProjectsRepository;
+    findIneligibleProjectsRepositoryStub: FindIneligibleProjectsRepository;
+  }): void {
+    jest
+      .spyOn(stubs.findEligibleProjectsRepositoryStub!, 'findAllEligibles')
+      .mockReturnValueOnce(
+        Promise.resolve(
+          createFakeProjects().filter(
+            (p) => p.title === 'collect_information_for_xpto',
+          ),
+        ),
+      );
+    jest
+      .spyOn(stubs.findIneligibleProjectsRepositoryStub!, 'findAllIneligibles')
+      .mockReturnValueOnce(
+        Promise.resolve(
+          createFakeProjects().filter(
+            (p) => p.title !== 'collect_information_for_xpto',
+          ),
+        ),
+      );
+  }
+  static dataProviderRecord: PairWithProjectDataProvider = {
+    expectedResult: {
+      score: this.expectedScore,
+      selectedProject: this.selectedProject,
+      eligibleProjects: this.eligibleProjects,
+      ineligibleProjects: this.ineligibleProjects,
+    },
+    pairedProjectTitle: this.selectedProject,
+    input: this.input,
+    mocksCallback: this.mocksCallback,
+  };
+}
+
 interface PairWithProjectDataProvider {
   input: PairProWithProjectInput;
   expectedResult: PairProWithProjectOutput;
@@ -156,4 +211,5 @@ export const pairWithProjectDataProvider: PairWithProjectDataProvider[] = [
   CalculateDarkMatterData.dataProviderRecord,
   SchrodingerCatData.dataProviderRecord,
   SupportUsersData.dataProviderRecord,
+  CollectInformationData.dataProviderRecord,
 ];
