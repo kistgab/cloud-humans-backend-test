@@ -48,6 +48,19 @@ describe('PairProWithProject - Controller', () => {
     });
   });
 
+  it('should throw if usecase throws', async () => {
+    const sut = createSut();
+    jest
+      .spyOn(PairProWithProjectUseCase.prototype, 'pair')
+      .mockImplementationOnce(() => {
+        throw new Error('UseCase error');
+      });
+
+    const promise = sut.handle(createFakeInput());
+
+    expect(promise).rejects.toThrow('UseCase error');
+  });
+
   it('should call the usecase factory', async () => {
     const sut = createSut();
     const pairSpy = jest.spyOn(PairProWithProjectUseCaseFactory, 'create');
