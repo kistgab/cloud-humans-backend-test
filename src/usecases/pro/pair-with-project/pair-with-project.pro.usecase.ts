@@ -8,6 +8,12 @@ import {
   PairProWithProjectOutput,
 } from '@/usecases/pro/pair-with-project/pair-with-project.pro.dto';
 
+interface GetAllProjects {
+  allEligibles: ProjectEntity[];
+  allIneligibles: ProjectEntity[];
+  selectedProject: ProjectEntity | undefined;
+}
+
 export class PairProWithProjectUseCase {
   private readonly VALID_REFERRAL_CODE_POINTS = 1;
   private readonly INVALID_REFERRAL_CODE_POINTS = 0;
@@ -22,16 +28,13 @@ export class PairProWithProjectUseCase {
     input: PairProWithProjectInput,
   ): Promise<PairProWithProjectOutput> {
     const proScore = await this.calculateProScore(input);
-    const eligibleProjects =
-      await this.findEligibleProjectsRepository.findAllEligibles(proScore);
-    const ineligibleProjects =
-      await this.findIneligibleProjectsRepository.findAllIneligibles(proScore);
-    const selectedProject = this.getSelectedProject(eligibleProjects);
+    const { allEligibles, allIneligibles, selectedProject } =
+      await this.getAllProjects(proScore);
     return {
       score: proScore,
       selectedProject: selectedProject?.title || null,
-      eligibleProjects: this.getProjectsTitles(eligibleProjects),
-      ineligibleProjects: this.getProjectsTitles(ineligibleProjects),
+      eligibleProjects: this.getProjectsTitles(allEligibles),
+      ineligibleProjects: this.getProjectsTitles(allIneligibles),
     };
   }
 
@@ -66,6 +69,19 @@ export class PairProWithProjectUseCase {
     return isValid
       ? this.VALID_REFERRAL_CODE_POINTS
       : this.INVALID_REFERRAL_CODE_POINTS;
+  }
+
+  private async getAllProjects(proScore: number): Promise<GetAllProjects> {
+    const allEligibles =
+      await this.findEligibleProjectsRepository.findAllEligibles(proScore);
+    const allIneligibles =
+      await this.findIneligibleProjectsRepository.findAllIneligibles(proScore);
+    const selectedProject = this.getSelectedProject(allEligibles);
+    return {
+      allEligibles,
+      allIneligibles,
+      selectedProject,
+    };
   }
 
   private getProjectsTitles(projects: ProjectEntity[]): string[] {
