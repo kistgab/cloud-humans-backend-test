@@ -1,4 +1,5 @@
 import { ProEntity } from '@/domain/pro/entity/pro.entity';
+import { IsValidReferralCodeRepository } from '@/domain/pro/repository/is-valid-referral-code.repository';
 import { ProjectEntity } from '@/domain/project/entity/project.entity';
 import { FindEligibleProjectsRepository } from '@/domain/project/repository/find-eligible-projects.repository';
 import { FindIneligibleProjectsRepository } from '@/domain/project/repository/find-ineligible-projects-repository';
@@ -8,6 +9,17 @@ import {
   createFakePairWithProjectInput,
   createFakeProjects,
 } from '__tests__/utils/pair-with-project-utils.pro.usecase';
+
+function createIsValidReferralCodeRepositoryStub(): IsValidReferralCodeRepository {
+  class IsValidReferralCodeRepositoryStub
+    implements IsValidReferralCodeRepository
+  {
+    async isValidReferralCode(): Promise<boolean> {
+      return Promise.resolve(true);
+    }
+  }
+  return new IsValidReferralCodeRepositoryStub();
+}
 
 function createFindEligibleProjectsRepositoryStub(): FindEligibleProjectsRepository {
   class FindEligibleProjectsRepositoryStub
@@ -35,6 +47,7 @@ type SutTypes = {
   sut: PairProWithProjectUseCase;
   findEligibleProjectsRepositoryStub: FindEligibleProjectsRepository;
   findIneligibleProjectsRepositoryStub: FindIneligibleProjectsRepository;
+  isValidReferralCodeRepositoryStub: IsValidReferralCodeRepository;
 };
 
 function createSut(): SutTypes {
@@ -42,14 +55,18 @@ function createSut(): SutTypes {
     createFindEligibleProjectsRepositoryStub();
   const findIneligibleProjectsRepositoryStub =
     createFindIneligibleProjectsRepositoryStub();
+  const isValidReferralCodeRepositoryStub =
+    createIsValidReferralCodeRepositoryStub();
   const sut = new PairProWithProjectUseCase(
     findEligibleProjectsRepositoryStub,
     findIneligibleProjectsRepositoryStub,
+    isValidReferralCodeRepositoryStub,
   );
   return {
     sut,
     findEligibleProjectsRepositoryStub,
     findIneligibleProjectsRepositoryStub,
+    isValidReferralCodeRepositoryStub,
   };
 }
 
@@ -120,6 +137,33 @@ describe('PairProWithProject - Use Case', () => {
     const promise = sut.pair(createFakePairWithProjectInput());
 
     expect(promise).rejects.toThrow('ProEntity error');
+  });
+
+  it('should call the IsValidReferralCodeRepository with correct value', async () => {
+    const { sut, isValidReferralCodeRepositoryStub } = createSut();
+    const isValidReferralCodeSpy = jest.spyOn(
+      isValidReferralCodeRepositoryStub,
+      'isValidReferralCode',
+    );
+
+    await sut.pair(
+      createFakePairWithProjectInput({ referralCode: 'any_token' }),
+    );
+
+    expect(isValidReferralCodeSpy).toHaveBeenCalledWith('any_token');
+  });
+
+  it('should throw if IsValidReferralCodeRepository throws', () => {
+    const { sut, isValidReferralCodeRepositoryStub } = createSut();
+    jest
+      .spyOn(isValidReferralCodeRepositoryStub, 'isValidReferralCode')
+      .mockReturnValueOnce(
+        Promise.reject(new Error('IsValidReferralCodeRepository error')),
+      );
+
+    const promise = sut.pair(createFakePairWithProjectInput());
+
+    expect(promise).rejects.toThrow('IsValidReferralCodeRepository error');
   });
 
   describe('should pair the pro with the project', () => {

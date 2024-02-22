@@ -202,25 +202,5 @@ describe('Pro Entity', () => {
 
       expect(result).toBe(2);
     });
-
-    it('should add a point if referralCode is valid', () => {
-      const pro = createSut({
-        referralCode: 'token1234',
-      });
-
-      const result = pro.calculateScore();
-
-      expect(result).toBe(1 + writingScorePoints);
-    });
-
-    it('should add no points if referralCode is valid', () => {
-      const pro = createSut({
-        referralCode: 'invalid-referral-code',
-      });
-
-      const result = pro.calculateScore();
-
-      expect(result).toBe(0 + writingScorePoints);
-    });
   });
 });

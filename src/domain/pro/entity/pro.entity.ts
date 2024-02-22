@@ -22,9 +22,6 @@ export class ProEntity {
   private readonly MAXIMUM_OK_WRITING_SCORE = 0.7;
   private readonly OK_WRITING_SCORE_POINTS = 1;
   private readonly GOOD_WRITING_SCORE_POINTS = 2;
-  private readonly VALID_REFERRAL_CODE_POINTS = 1;
-  private readonly INVALID_REFERRAL_CODE_POINTS = 0;
-  private readonly VALID_REFERRAL_CODE = 'token1234';
 
   constructor(
     private readonly _age: number,
@@ -68,7 +65,6 @@ export class ProEntity {
     totalScore += this.calculatePastExperiencesScore();
     totalScore += this.calculateInternetScore();
     totalScore += this.calculateWritingScore();
-    totalScore += this.calculateReferralCodeScore();
     return totalScore;
   }
 
@@ -134,12 +130,5 @@ export class ProEntity {
       return this.OK_WRITING_SCORE_POINTS;
     }
     return this.BAD_WRITING_SCORE_POINTS;
-  }
-
-  private calculateReferralCodeScore(): number {
-    if (this._referralCode === this.VALID_REFERRAL_CODE) {
-      return this.VALID_REFERRAL_CODE_POINTS;
-    }
-    return this.INVALID_REFERRAL_CODE_POINTS;
   }
 }

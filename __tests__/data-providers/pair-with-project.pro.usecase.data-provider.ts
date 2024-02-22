@@ -1,4 +1,5 @@
 import { EducationLevel } from '@/domain/pro/enums/education-levels.enum';
+import { IsValidReferralCodeRepository } from '@/domain/pro/repository/is-valid-referral-code.repository';
 import { FindEligibleProjectsRepository } from '@/domain/project/repository/find-eligible-projects.repository';
 import { FindIneligibleProjectsRepository } from '@/domain/project/repository/find-ineligible-projects-repository';
 import {
@@ -16,7 +17,7 @@ abstract class SchrodingerCatData {
     .filter((p) => p !== 'calculate_dark_matter_nasa');
   private static selectedProject = 'determine_schrodinger_cat_is_alive';
   private static ineligibleProjects = ['calculate_dark_matter_nasa'];
-  private static expectedScore = 7;
+  private static expectedScore = 6;
   private static input = createFakePairWithProjectInput({
     educationLevel: EducationLevel.HighSchool,
     pastExperiences: { sales: false, support: true },
@@ -25,7 +26,6 @@ abstract class SchrodingerCatData {
       downloadSpeed: 50.4,
       uploadSpeed: 40.2,
     },
-    referralCode: 'token1234',
   });
   private static mocksCallback(stubs: {
     findEligibleProjectsRepositoryStub: FindEligibleProjectsRepository;
@@ -58,7 +58,7 @@ abstract class SchrodingerCatData {
       ineligibleProjects: this.ineligibleProjects,
     },
     pairedProjectTitle: this.selectedProject,
-    input: this.input,
+    input: { ...this.input, referralCode: undefined },
     mocksCallback: this.mocksCallback,
   };
 }
@@ -75,18 +75,19 @@ abstract class SupportUsersData {
   private static selectedProject = 'support_users_from_xyz';
   private static expectedScore = 4;
   private static input = createFakePairWithProjectInput({
-    educationLevel: EducationLevel.HighSchool,
+    educationLevel: EducationLevel.BachelorsDegreeOrHigher,
     pastExperiences: { sales: false, support: false },
     writingScore: 0.6,
     internetTest: {
       downloadSpeed: 50.2,
       uploadSpeed: 40.2,
     },
-    referralCode: 'token1234',
+    referralCode: 'invalid-token',
   });
   private static mocksCallback(stubs: {
     findEligibleProjectsRepositoryStub: FindEligibleProjectsRepository;
     findIneligibleProjectsRepositoryStub: FindIneligibleProjectsRepository;
+    isValidReferralCodeRepositoryStub: IsValidReferralCodeRepository;
   }): void {
     jest
       .spyOn(stubs.findEligibleProjectsRepositoryStub!, 'findAllEligibles')
@@ -110,6 +111,9 @@ abstract class SupportUsersData {
           ),
         ),
       );
+    jest
+      .spyOn(stubs.isValidReferralCodeRepositoryStub, 'isValidReferralCode')
+      .mockReturnValueOnce(Promise.resolve(false));
   }
   static dataProviderRecord: PairWithProjectDataProvider = {
     expectedResult: {
