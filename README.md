@@ -30,6 +30,17 @@ To run the tests you have to `npm install` all packages.
 
 # Main Technical Decisions;
 
+- I decided to use Screaming Architecture in the project to make it looks like a Pro/Project application and not only another project that has the same layers and everything similar. Also, it makes the project more understandable.
+- I also followed some good practices like TDD, SOLID, Clean Code.
+- I decided to use a json file instead a database to store/search the projects to not add more complexity. But with the made project responsability divisions, it would be simple:
+  - Choose and create a database;
+  - Necessary to install the dependencies;
+  - Code a new repository to it;
+  - The rest of the code would stay the same and working as well.
+- Swagger was added to documentate the code and make the manual testing process simpler.
+- Conventional commits and small commits were used during the whole development cycle to make the commits more understandable.
+- A strict Typescript was used, to force you to define types to in code.
+
 # Relevant Comments About The Project
 
 ## Project Overview
@@ -44,3 +55,14 @@ This project follows `Screaming Architecture` to make it more understandable and
 ## Contact information
 
 If you have any questions or feedback, you can reach me at gabrielkist02@gmail.com or on my GitHub profile @kistgab.
+
+# TODO List
+
+- Validate nested object entry dto
+- E2E test - OK
+- Docker integration - OK
+- Swagger - OK
+- Write README docs file
+- Add a repository for referralCode in the usecase
+- Code review
+- use .env for port in docker and in app.listen
