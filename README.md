@@ -55,14 +55,3 @@ This project follows `Screaming Architecture` to make it more understandable and
 ## Contact information
 
 If you have any questions or feedback, you can reach me at gabrielkist02@gmail.com or on my GitHub profile @kistgab.
-
-# TODO List
-
-- Validate nested object entry dto
-- E2E test - OK
-- Docker integration - OK
-- Swagger - OK
-- Write README docs file
-- Add a repository for referralCode in the usecase
-- Code review
-- use .env for port in docker and in app.listen
