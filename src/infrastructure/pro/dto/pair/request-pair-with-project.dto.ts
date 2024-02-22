@@ -6,7 +6,10 @@ import {
   IsNotEmptyObject,
   IsNumber,
   IsOptional,
+  IsPositive,
   IsString,
+  Max,
+  Min,
   ValidateNested,
 } from 'class-validator';
 
@@ -26,6 +29,7 @@ class PastExperiencesDto {
 
 export class RequestPairWithProject {
   @IsNumber()
+  @IsPositive()
   age: number;
 
   @IsEnum(EducationLevel)
@@ -40,6 +44,8 @@ export class RequestPairWithProject {
   internet_test: InternetTestDto;
 
   @IsNumber()
+  @Min(0)
+  @Max(1)
   writing_score: number;
 
   @IsOptional()

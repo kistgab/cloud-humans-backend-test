@@ -54,10 +54,13 @@ describe('AppController (e2e)', () => {
         .expect(400)
         .expect({
           message: [
+            'age must be a positive number',
             'age must be a number conforming to the specified constraints',
             'education_level must be one of the following values: no_education, high_school, bachelors_degree_or_high',
             'past_experiences must be a non-empty object',
             'internet_test must be a non-empty object',
+            'writing_score must not be greater than 1',
+            'writing_score must not be less than 0',
             'writing_score must be a number conforming to the specified constraints',
           ],
           error: 'Bad Request',
