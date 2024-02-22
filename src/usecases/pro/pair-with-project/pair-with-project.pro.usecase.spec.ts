@@ -3,11 +3,11 @@ import { ProjectEntity } from '@/domain/project/entity/project.entity';
 import { FindEligibleProjectsRepository } from '@/domain/project/repository/find-eligible-projects.repository';
 import { FindIneligibleProjectsRepository } from '@/domain/project/repository/find-ineligible-projects-repository';
 import { PairProWithProjectUseCase } from '@/usecases/pro/pair-with-project/pair-with-project.pro.usecase';
-import { pairWithProjectDataProvider } from '@test/data-providers/pair-with-project.pro.usecase.data-provider';
+import { pairWithProjectDataProvider } from '__tests__/data-providers/pair-with-project.pro.usecase.data-provider';
 import {
   createFakePairWithProjectInput,
   createFakeProjects,
-} from '@test/utils/pair-with-project-utils.pro.usecase';
+} from '__tests__/utils/pair-with-project-utils.pro.usecase';
 
 function createFindEligibleProjectsRepositoryStub(): FindEligibleProjectsRepository {
   class FindEligibleProjectsRepositoryStub

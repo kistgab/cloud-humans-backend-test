@@ -8,7 +8,7 @@ import {
 import {
   createFakePairWithProjectInput,
   createFakeProjects,
-} from '@test/utils/pair-with-project-utils.pro.usecase';
+} from '__tests__/utils/pair-with-project-utils.pro.usecase';
 
 abstract class SchrodingerCatData {
   private static eligibleProjects = createFakeProjects()
