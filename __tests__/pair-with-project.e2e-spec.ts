@@ -54,6 +54,7 @@ describe('AppController (e2e)', () => {
         .expect(400)
         .expect({
           message: [
+            'age must be an integer number',
             'age must be a positive number',
             'age must be a number conforming to the specified constraints',
             'education_level must be one of the following values: no_education, high_school, bachelors_degree_or_high',

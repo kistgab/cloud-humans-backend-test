@@ -3,6 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
   IsEnum,
+  IsInt,
   IsNotEmpty,
   IsNotEmptyObject,
   IsNumber,
@@ -31,6 +32,7 @@ class PastExperiencesDto {
 export class RequestPairWithProject {
   @IsNumber()
   @IsPositive()
+  @IsInt()
   @ApiProperty({ description: "The pro's age in full years" })
   age: number;
 
