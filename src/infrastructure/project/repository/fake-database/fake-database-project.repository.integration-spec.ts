@@ -1,6 +1,6 @@
-import { ProjectEntity } from '@/domain/project/entity/project.entity';
 import { ProjectMapper } from '@/infrastructure/project/mapper/project.mapper';
 import { FakeDatabaseProjectRepository } from '@/infrastructure/project/repository/fake-database/fake-database-project.repository';
+import { ProjectModel } from '@/infrastructure/project/repository/fake-database/project.model';
 import { readFileSync } from 'fs';
 
 function createSut(): FakeDatabaseProjectRepository {
@@ -20,13 +20,13 @@ describe('FakeDatabaseProject - Repository', () => {
       expect(projects).toEqual(allProjects);
     });
 
-    it('should only the projects that Pro can be eligible by his score', async () => {
+    it('should only return the projects that Pro can be eligible by his score', async () => {
       const sut = createSut();
       const allEligibleProjects = JSON.parse(
         readFileSync('data/static-projects.json', 'utf-8'),
       )
-        .projects.map(ProjectMapper.toEntity)
-        .filter((p: ProjectEntity) => p.minimumScore < 6);
+        .projects.filter((p: ProjectModel) => p.minimum_score < 6)
+        .map(ProjectMapper.toEntity);
 
       const projects = await sut.findAllEligibles(6);
 
@@ -39,6 +39,40 @@ describe('FakeDatabaseProject - Repository', () => {
       const projects = await sut.findAllEligibles(0);
 
       expect(projects).toHaveLength(0);
+    });
+  });
+
+  describe('findAllIneligibles', () => {
+    it('should return no projects when the Pro score is the maximum', async () => {
+      const sut = createSut();
+
+      const projects = await sut.findAllIneligibles(100);
+
+      expect(projects).toHaveLength(0);
+    });
+
+    it('should only return the projects that Pro cannot be eligible by his score', async () => {
+      const sut = createSut();
+      const allIneligibleProjects = JSON.parse(
+        readFileSync('data/static-projects.json', 'utf-8'),
+      )
+        .projects.filter((p: ProjectModel) => p.minimum_score >= 6)
+        .map(ProjectMapper.toEntity);
+
+      const projects = await sut.findAllIneligibles(6);
+
+      expect(projects).toEqual(allIneligibleProjects);
+    });
+
+    it('should return all projects', async () => {
+      const sut = createSut();
+      const allProjects = JSON.parse(
+        readFileSync('data/static-projects.json', 'utf-8'),
+      ).projects.map(ProjectMapper.toEntity);
+
+      const projects = await sut.findAllIneligibles(0);
+
+      expect(projects).toEqual(allProjects);
     });
   });
 });
