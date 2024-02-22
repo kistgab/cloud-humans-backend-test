@@ -1,5 +1,6 @@
 import { EducationLevel } from '@/domain/pro/enums/education-levels.enum';
 import { RequestPairWithProject } from '@/infrastructure/pro/dto/pair/request-pair-with-project.dto';
+import { PairProWithProjectUseCaseFactory } from '@/infrastructure/pro/factory/pair-with-project-usecase.pro.factory';
 import { PairProWithProjectController } from '@/presentation/pro/controllers/pair-with-project.pro.controller';
 import { PairProWithProjectUseCase } from '@/usecases/pro/pair-with-project/pair-with-project.pro.usecase';
 
@@ -45,5 +46,14 @@ describe('PairProWithProject - Controller', () => {
       writingScore: 10,
       referralCode: '123',
     });
+  });
+
+  it('should call the usecase factory', async () => {
+    const sut = createSut();
+    const pairSpy = jest.spyOn(PairProWithProjectUseCaseFactory, 'create');
+
+    await sut.handle(createFakeInput());
+
+    expect(pairSpy).toHaveBeenCalledTimes(1);
   });
 });
