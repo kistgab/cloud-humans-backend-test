@@ -19,7 +19,11 @@
 
 ## Tests
 
-### Run
+### Consume API by Swagger
+
+To use Swagger you can access the address `http://localhost:3000/api` in your browser after ran the application
+
+### Run tests by script
 
 To run the tests you have to `npm install` all packages.
 
